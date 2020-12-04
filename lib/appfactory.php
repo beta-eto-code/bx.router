@@ -9,6 +9,7 @@ use Bitrix\Main\HttpResponse;
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\BitrixServiceInterface;
 use BX\Router\Interfaces\ComponentWrapperInterface;
+use BX\Router\Interfaces\ContainerGetterInterface;
 use BX\Router\PSR7\RequestAdapterPSR;
 use BX\Router\PSR7\ResponseAdapterPSR;
 use BX\Router\PSR7\ServerRequestAdapterPSR;
@@ -27,10 +28,15 @@ class AppFactory implements AppFactoryInterface
      * @var BitrixServiceInterface
      */
     private $bitrixService;
+    /**
+     * @var ContainerGetterInterface
+     */
+    private $containerGetter;
 
-    public function __construct(BitrixServiceInterface $bitrixService)
+    public function __construct(BitrixServiceInterface $bitrixService, ContainerGetterInterface $containerGetter)
     {
         $this->bitrixService = $bitrixService;
+        $this->containerGetter = $containerGetter;
     }
 
     public function createRequest(string $method, $uri): RequestInterface
@@ -87,8 +93,13 @@ class AppFactory implements AppFactoryInterface
         return new Uri($uri);
     }
 
-    public function createComponentWrapper(string $componentName, string $templateName, array $params): ComponentWrapperInterface
+    public function createComponentWrapper(string $componentName, string $templateName = '', array $params = []): ComponentWrapperInterface
     {
-        // TODO: Implement createComponentWrapper() method.
+        $wrapper = new ComponentWrapper($componentName, $templateName, $params);
+        $wrapper->setAppFactory($this);
+        $wrapper->setContainer($this->containerGetter);
+        $wrapper->setBitrixService($this->bitrixService);
+
+        return $wrapper;
     }
 }

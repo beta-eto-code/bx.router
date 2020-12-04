@@ -55,7 +55,7 @@ class RestApplication implements RestAppInterface
         $this->responseHandler = new ResponseHandler();
         $this->container = new Container;
         $this->bitrixService = new BitrixService;
-        $this->factory = new AppFactory($this->bitrixService);
+        $this->factory = new AppFactory($this->bitrixService, $this->container);
     }
 
     public function getFactory(): AppFactoryInterface

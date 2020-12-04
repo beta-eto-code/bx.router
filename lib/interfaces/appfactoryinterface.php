@@ -23,6 +23,6 @@ interface AppFactoryInterface extends RequestFactoryInterface, ResponseFactoryIn
      */
     public function createComponentWrapper(
         string $componentName,
-        string $templateName,
-        array $params): ComponentWrapperInterface;
+        string $templateName = '',
+        array $params = []): ComponentWrapperInterface;
 }
