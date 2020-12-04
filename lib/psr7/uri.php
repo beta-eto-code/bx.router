@@ -6,6 +6,7 @@
 
 namespace BX\Router\PSR7;
 
+use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -83,7 +84,7 @@ class Uri implements UriInterface
         if ($uri !== '') {
             $parts = parse_url($uri);
             if ($parts === false) {
-                throw new \InvalidArgumentException("Unable to parse URI: $uri");
+                throw new InvalidArgumentException("Unable to parse URI: $uri");
             }
             $this->applyParts($parts);
         }
@@ -309,7 +310,7 @@ class Uri implements UriInterface
      *
      * @link http://php.net/manual/en/function.parse-url.php
      *
-     * @throws \InvalidArgumentException If the components do not form a valid URI.
+     * @throws InvalidArgumentException If the components do not form a valid URI.
      */
     public static function fromParts(array $parts): UriInterface
     {
@@ -522,12 +523,12 @@ class Uri implements UriInterface
     /**
      * @param mixed $scheme
      *
-     * @throws \InvalidArgumentException If the scheme is invalid.
+     * @throws InvalidArgumentException If the scheme is invalid.
      */
     private function filterScheme($scheme): string
     {
         if (!is_string($scheme)) {
-            throw new \InvalidArgumentException('Scheme must be a string');
+            throw new InvalidArgumentException('Scheme must be a string');
         }
 
         return strtolower($scheme);
@@ -536,12 +537,12 @@ class Uri implements UriInterface
     /**
      * @param mixed $component
      *
-     * @throws \InvalidArgumentException If the user info is invalid.
+     * @throws InvalidArgumentException If the user info is invalid.
      */
     private function filterUserInfoComponent($component): string
     {
         if (!is_string($component)) {
-            throw new \InvalidArgumentException('User info must be a string');
+            throw new InvalidArgumentException('User info must be a string');
         }
 
         return preg_replace_callback(
@@ -554,12 +555,12 @@ class Uri implements UriInterface
     /**
      * @param mixed $host
      *
-     * @throws \InvalidArgumentException If the host is invalid.
+     * @throws InvalidArgumentException If the host is invalid.
      */
     private function filterHost($host): string
     {
         if (!is_string($host)) {
-            throw new \InvalidArgumentException('Host must be a string');
+            throw new InvalidArgumentException('Host must be a string');
         }
 
         return strtolower($host);
@@ -568,7 +569,7 @@ class Uri implements UriInterface
     /**
      * @param mixed $port
      *
-     * @throws \InvalidArgumentException If the port is invalid.
+     * @throws InvalidArgumentException If the port is invalid.
      */
     private function filterPort($port): ?int
     {
@@ -578,7 +579,7 @@ class Uri implements UriInterface
 
         $port = (int) $port;
         if (0 > $port || 0xffff < $port) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Invalid port: %d. Must be between 0 and 65535', $port)
             );
         }
@@ -632,12 +633,12 @@ class Uri implements UriInterface
      *
      * @param mixed $path
      *
-     * @throws \InvalidArgumentException If the path is invalid.
+     * @throws InvalidArgumentException If the path is invalid.
      */
     private function filterPath($path): string
     {
         if (!is_string($path)) {
-            throw new \InvalidArgumentException('Path must be a string');
+            throw new InvalidArgumentException('Path must be a string');
         }
 
         return preg_replace_callback(
@@ -652,12 +653,12 @@ class Uri implements UriInterface
      *
      * @param mixed $str
      *
-     * @throws \InvalidArgumentException If the query or fragment is invalid.
+     * @throws InvalidArgumentException If the query or fragment is invalid.
      */
     private function filterQueryAndFragment($str): string
     {
         if (!is_string($str)) {
-            throw new \InvalidArgumentException('Query and fragment must be a string');
+            throw new InvalidArgumentException('Query and fragment must be a string');
         }
 
         return preg_replace_callback(
@@ -680,13 +681,13 @@ class Uri implements UriInterface
 
         if ($this->getAuthority() === '') {
             if (0 === strpos($this->path, '//')) {
-                throw new \InvalidArgumentException('The path of a URI without an authority must not start with two slashes "//"');
+                throw new InvalidArgumentException('The path of a URI without an authority must not start with two slashes "//"');
             }
             if ($this->scheme === '' && false !== strpos(explode('/', $this->path, 2)[0], ':')) {
-                throw new \InvalidArgumentException('A relative URI must not have a path beginning with a segment containing a colon');
+                throw new InvalidArgumentException('A relative URI must not have a path beginning with a segment containing a colon');
             }
         } elseif (isset($this->path[0]) && $this->path[0] !== '/') {
-            throw new \InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
+            throw new InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
         }
     }
 }

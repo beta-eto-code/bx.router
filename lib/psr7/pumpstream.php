@@ -7,6 +7,9 @@
 namespace BX\Router\PSR7;
 
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
+use Throwable;
+use const PHP_VERSION_ID;
 
 /**
  * Provides a read only stream that pumps data from a PHP callable.
@@ -57,8 +60,8 @@ final class PumpStream implements StreamInterface
     {
         try {
             return copy_to_string($this);
-        } catch (\Throwable $e) {
-            if (\PHP_VERSION_ID >= 70400) {
+        } catch (Throwable $e) {
+            if (PHP_VERSION_ID >= 70400) {
                 throw $e;
             }
             trigger_error(sprintf('%s::__toString exception: %s', self::class, (string) $e), E_USER_ERROR);
@@ -106,7 +109,7 @@ final class PumpStream implements StreamInterface
 
     public function seek($offset, $whence = SEEK_SET): void
     {
-        throw new \RuntimeException('Cannot seek a PumpStream');
+        throw new RuntimeException('Cannot seek a PumpStream');
     }
 
     public function isWritable(): bool
@@ -116,7 +119,7 @@ final class PumpStream implements StreamInterface
 
     public function write($string): int
     {
-        throw new \RuntimeException('Cannot write to a PumpStream');
+        throw new RuntimeException('Cannot write to a PumpStream');
     }
 
     public function isReadable(): bool

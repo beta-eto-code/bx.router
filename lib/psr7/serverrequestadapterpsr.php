@@ -2,8 +2,6 @@
 
 namespace BX\Router\PSR7;
 
-use Bitrix\Main\HttpRequest;
-use BX\Router\UploadedFile;
 use Psr\Http\Message\ServerRequestInterface;
 
 class ServerRequestAdapterPSR extends RequestAdapterPSR implements ServerRequestInterface

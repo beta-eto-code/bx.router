@@ -83,3 +83,69 @@ function try_fopen(string $filename, string $mode)
 
     return $handle;
 }
+
+function copy_to_stream(
+    StreamInterface $source,
+    StreamInterface $dest,
+    int $maxLen = -1
+): void {
+    $bufferSize = 8192;
+
+    if ($maxLen === -1) {
+        while (!$source->eof()) {
+            if (!$dest->write($source->read($bufferSize))) {
+                break;
+            }
+        }
+    } else {
+        $remaining = $maxLen;
+        while ($remaining > 0 && !$source->eof()) {
+            $buf = $source->read(min($bufferSize, $remaining));
+            $len = strlen($buf);
+            if (!$len) {
+                break;
+            }
+            $remaining -= $len;
+            $dest->write($buf);
+        }
+    }
+}
+
+
+/**
+ * Copy the contents of a stream into a string until the given number of
+ * bytes have been read.
+ *
+ * @param StreamInterface $stream Stream to read
+ * @param int             $maxLen Maximum number of bytes to read. Pass -1
+ *                                to read the entire stream.
+ *
+ * @throws \RuntimeException on error.
+ */
+function copy_to_string(StreamInterface $stream, int $maxLen = -1): string
+{
+    $buffer = '';
+
+    if ($maxLen === -1) {
+        while (!$stream->eof()) {
+            $buf = $stream->read(1048576);
+            if ($buf === '') {
+                break;
+            }
+            $buffer .= $buf;
+        }
+        return $buffer;
+    }
+
+    $len = 0;
+    while (!$stream->eof() && $len < $maxLen) {
+        $buf = $stream->read($maxLen - $len);
+        if ($buf === '') {
+            break;
+        }
+        $buffer .= $buf;
+        $len = strlen($buffer);
+    }
+
+    return $buffer;
+}
