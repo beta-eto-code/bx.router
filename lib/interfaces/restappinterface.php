@@ -4,6 +4,7 @@
 namespace BX\Router\Interfaces;
 
 use BX\Router\ResponseHandler;
+use Psr\Http\Server\MiddlewareInterface;
 
 interface RestAppInterface
 {
@@ -16,15 +17,21 @@ interface RestAppInterface
      * Добавляем сервис в DI контейнер
      * @param string $name
      * @param $serviceInstance
-     * @return mixed
+     * @return void
      */
     public function setService(string $name, $serviceInstance);
 
     /**
      * @param ResponseHandler $responseHandler
-     * @return mixed
+     * @return void
      */
     public function setResponseHandler(ResponseHandler $responseHandler);
+
+    /**
+     * @param MiddlewareInterface $middleware
+     * @return void
+     */
+    public function registerMiddleware(MiddlewareInterface $middleware);
 
     /**
      * @return RouterInterface
@@ -32,7 +39,7 @@ interface RestAppInterface
     public function getRouter(): RouterInterface;
 
     /**
-     * @return mixed
+     * @return void
      */
     public function run();
 }

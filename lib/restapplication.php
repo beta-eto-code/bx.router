@@ -13,6 +13,7 @@ use BX\Router\Interfaces\RouterInterface;
 use BX\Router\PSR7\ServerRequestAdapterPSR;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class RestApplication implements RestAppInterface
@@ -46,6 +47,11 @@ class RestApplication implements RestAppInterface
      * @var ResponseHandler
      */
     private $responseHandler;
+
+    /**
+     * @var MiddlewareInterface[]
+     */
+    private $middlewares;
 
     public function __construct()
     {
@@ -90,9 +96,57 @@ class RestApplication implements RestAppInterface
             $request = $request->withAttribute($name, $value);
         }
 
-        $response = $this->executeController($request, $controller);
+        $response = null;
+        $newController = $this->makeLazyController($controller);
+        foreach ($this->middlewares as $middleware) {
+            $response = $middleware->process($request, $newController);
+            $newController = $this->getNewHandler($response);
+        }
+
+        if (empty($response)) {
+            $response = $newController->handle($request);
+        }
+
         $this->responseHandler->handle($response);
         $this->bitrixService->getBxApplication()->terminate();
+    }
+
+    /**
+     * @param ControllerInterface $controller
+     * @return RequestHandlerInterface
+     */
+    private function makeLazyController(ControllerInterface $controller)
+    {
+        $call = function (ServerRequestInterface $request, ControllerInterface $controller) {
+            return $this->executeController($request, $controller);
+        };
+
+        return new class($call, $controller) implements RequestHandlerInterface {
+
+            /**
+             * @var callable
+             */
+            private $call;
+
+            /**
+             * @var ControllerInterface
+             */
+            private $controller;
+
+            public function __construct(
+                callable $call,
+                ControllerInterface $controller
+            ){
+                $this->call = $call;
+                $this->controller = $controller;
+            }
+
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                $call = $this->call;
+                return $call($request, $this->controller);
+            }
+        };
     }
 
     /**
@@ -110,22 +164,30 @@ class RestApplication implements RestAppInterface
         $response = null;
         foreach ($middlewares as $key => $middleware) {
             $response = $middleware->process($request, $controller);
-
-            $controller = new class($response) implements RequestHandlerInterface {
-                private $response;
-
-                public function __construct(ResponseInterface $response) {
-                    $this->response = $response;
-                }
-
-                public function handle(ServerRequestInterface $request): ResponseInterface
-                {
-                    return $this->response;
-                }
-            };
+            $controller = $this->getNewHandler($response);
         }
 
         return $response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return RequestHandlerInterface
+     */
+    private function getNewHandler(ResponseInterface $response): RequestHandlerInterface
+    {
+        return new class($response) implements RequestHandlerInterface {
+            private $response;
+
+            public function __construct(ResponseInterface $response) {
+                $this->response = $response;
+            }
+
+            public function handle(ServerRequestInterface $request): ResponseInterface
+            {
+                return $this->response;
+            }
+        };
     }
 
     public function setService(string $name, $serviceInstance)
@@ -139,8 +201,22 @@ class RestApplication implements RestAppInterface
         return $this->router;
     }
 
+    /**
+     * @param ResponseHandler $responseHandler
+     * @return void
+     */
     public function setResponseHandler(ResponseHandler $responseHandler)
     {
         $this->responseHandler = $responseHandler;
+    }
+
+    /**
+     * @param MiddlewareInterface $middleware
+     * @return void
+     */
+    public function registerMiddleware(MiddlewareInterface $middleware)
+    {
+        $middlewareClass = get_class($middleware);
+        $this->middlewares[$middlewareClass] = $middleware;
     }
 }

@@ -49,7 +49,7 @@ class ComponentWrapper extends BaseController implements ComponentWrapperInterfa
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $request = $this->appFactory
+        $response = $this->appFactory
             ->createResponse()
             ->withHeader('Content-Type', 'application/json');
 
@@ -57,6 +57,7 @@ class ComponentWrapper extends BaseController implements ComponentWrapperInterfa
         $params['bitrixService'] = $this->bitrixService;
         $params['appFactory'] = $this->appFactory;
         $params['container'] = $this->container;
+        $params['request'] = $request;
 
         $data = $this->bitrixService->includeComponent(
             $this->componentName,
@@ -69,8 +70,8 @@ class ComponentWrapper extends BaseController implements ComponentWrapperInterfa
             $data = json_encode($data, JSON_UNESCAPED_UNICODE);
         }
 
-        $request->getBody()->write((string)$data);
+        $response->getBody()->write((string)$data);
 
-        return $request;
+        return $response;
     }
 }
