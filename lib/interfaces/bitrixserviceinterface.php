@@ -4,6 +4,8 @@
 namespace BX\Router\Interfaces;
 
 use Bitrix\Main\Application;
+use Bitrix\Main\UserTable;
+use CUser;
 
 interface BitrixServiceInterface
 {
@@ -11,6 +13,16 @@ interface BitrixServiceInterface
      * @return Application
      */
     public function getBxApplication();
+
+    /**
+     * @return CUser
+     */
+    public function getCUser();
+
+    /**
+     * @return UserTable
+     */
+    public function getUserTable();
 
     /**
      * @param string $componentName

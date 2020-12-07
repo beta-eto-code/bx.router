@@ -5,7 +5,9 @@ namespace BX\Router;
 
 
 use Bitrix\Main\Application;
+use Bitrix\Main\UserTable;
 use BX\Router\Interfaces\BitrixServiceInterface;
+use CUser;
 
 class BitrixService implements BitrixServiceInterface
 {
@@ -14,6 +16,14 @@ class BitrixService implements BitrixServiceInterface
      * @var Application|null
      */
     private $app;
+    /**
+     * @var CUser
+     */
+    private $cUser;
+    /**
+     * @var UserTable
+     */
+    private $userTable;
 
     public function getBxApplication()
     {
@@ -22,6 +32,30 @@ class BitrixService implements BitrixServiceInterface
         }
 
         return $this->app = Application::getInstance();
+    }
+
+    /**
+     * @return CUser
+     */
+    public function getCUser()
+    {
+        if ($this->cUser instanceof CUser) {
+            return $this->cUser;
+        }
+
+        return $this->cUser = new CUser();
+    }
+
+    /**
+     * @return UserTable
+     */
+    public function getUserTable()
+    {
+        if ($this->userTable instanceof UserTable) {
+            return  $this->userTable;
+        }
+
+        return $this->userTable = new UserTable();
     }
 
     public function getIblockElementManager(string $type, string $code)
