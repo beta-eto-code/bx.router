@@ -5,6 +5,7 @@ namespace BX\Router;
 
 
 use Bitrix\Main\Application;
+use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\UserTable;
 use BX\Router\Interfaces\BitrixServiceInterface;
 use CUser;
@@ -32,6 +33,15 @@ class BitrixService implements BitrixServiceInterface
         }
 
         return $this->app = Application::getInstance();
+    }
+
+    /**
+     * @param string $className
+     * @return DataManager
+     */
+    public function getTableByClass(string $className): string
+    {
+        return $className;
     }
 
     /**

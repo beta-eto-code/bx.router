@@ -4,6 +4,7 @@
 namespace BX\Router\Interfaces;
 
 use Bitrix\Main\Application;
+use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\UserTable;
 use CUser;
 
@@ -23,6 +24,12 @@ interface BitrixServiceInterface
      * @return UserTable
      */
     public function getUserTable();
+
+    /**
+     * @param string $className
+     * @return DataManager
+     */
+    public function getTableByClass(string $className): string;
 
     /**
      * @param string $componentName

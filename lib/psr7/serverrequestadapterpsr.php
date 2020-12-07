@@ -3,6 +3,7 @@
 namespace BX\Router\PSR7;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 class ServerRequestAdapterPSR extends RequestAdapterPSR implements ServerRequestInterface
 {
@@ -48,7 +49,7 @@ class ServerRequestAdapterPSR extends RequestAdapterPSR implements ServerRequest
     }
 
     /**
-     * @return array
+     * @return UploadedFileInterface[]
      */
     public function getUploadedFiles()
     {
