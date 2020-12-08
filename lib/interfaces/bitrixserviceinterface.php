@@ -26,10 +26,29 @@ interface BitrixServiceInterface
     public function getUserTable();
 
     /**
+     * @param string $tableName
+     * @return DataManager|null
+     */
+    public function getHlBlock(string $tableName);
+
+    /**
      * @param string $className
      * @return DataManager
      */
     public function getTableByClass(string $className): string;
+
+    /**
+     * @param array $fileInfo
+     * @param string $savePath
+     * @return int
+     */
+    public function saveFile(array $fileInfo, string $savePath): int;
+
+    /**
+     * @param string $filePath
+     * @return array
+     */
+    public function getFileInfo(string $filePath): array;
 
     /**
      * @param string $componentName

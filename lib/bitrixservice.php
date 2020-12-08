@@ -4,8 +4,14 @@
 namespace BX\Router;
 
 
+use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Application;
+use Bitrix\Main\ArgumentException;
+use Bitrix\Main\Loader;
+use Bitrix\Main\LoaderException;
+use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\ORM\Data\DataManager;
+use Bitrix\Main\SystemException;
 use Bitrix\Main\UserTable;
 use BX\Router\Interfaces\BitrixServiceInterface;
 use CUser;
@@ -25,6 +31,11 @@ class BitrixService implements BitrixServiceInterface
      * @var UserTable
      */
     private $userTable;
+
+    /**
+     * @var array
+     */
+    private $hlList;
 
     public function getBxApplication()
     {
@@ -101,5 +112,47 @@ class BitrixService implements BitrixServiceInterface
         $data = ob_get_clean();
 
         return $returnResult ? $result : $data;
+    }
+
+    /**
+     * @param string $tableName
+     * @return DataManager|null
+     * @throws ArgumentException
+     * @throws LoaderException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     */
+    public function getHlBlock(string $tableName)
+    {
+        if (!empty($this->hlList[$tableName])) {
+            return $this->hlList[$tableName];
+        }
+        Loader::includeModule('highloadblock');
+        $hlData = HighloadBlockTable::getRow([
+            'filter' => [
+                '=TABLE_NAME' => $tableName,
+            ]
+        ]);
+
+        return $this->hlList[$tableName] = HighloadBlockTable::compileEntity($hlData)->getDataClass();
+    }
+
+    /**
+     * @param string $filePath
+     * @return array
+     */
+    public function getFileInfo(string $filePath): array
+    {
+        return \CFile::MakeFileArray($filePath);
+    }
+
+    /**
+     * @param array $fileInfo
+     * @param string $savePath
+     * @return int
+     */
+    public function saveFile(array $fileInfo, string $savePath): int
+    {
+        return (int) \CFile::SaveFile($fileInfo, $savePath);
     }
 }
