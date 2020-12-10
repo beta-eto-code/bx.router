@@ -6,9 +6,9 @@ namespace BX\Router;
 
 use BX\Router\Bitrix\ExtendRouter;
 use BX\Router\Interfaces\ControllerInterface;
+use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Interfaces\RouteContextInterface;
 use BX\Router\Middlewares\Cache;
-use Psr\Http\Server\MiddlewareInterface;
 
 class RouteContext implements RouteContextInterface
 {
@@ -20,6 +20,10 @@ class RouteContext implements RouteContextInterface
      * @var ControllerInterface
      */
     private $controller;
+    /**
+     * @var MiddlewareChainInterface
+     */
+    private $middleware;
 
     public function __construct(ExtendRouter $router, ControllerInterface $controller)
     {
@@ -28,13 +32,13 @@ class RouteContext implements RouteContextInterface
     }
 
     /**
-     * @param MiddlewareInterface $middleware
-     * @return RouteContextInterface
+     * @param MiddlewareChainInterface $middleware
+     * @return MiddlewareChainInterface
      */
-    public function registerMiddleware(MiddlewareInterface $middleware): RouteContextInterface
+    public function registerMiddleware(MiddlewareChainInterface $middleware): MiddlewareChainInterface
     {
-        $this->router->registerMiddleware($this->controller, $middleware);
-        return $this;
+        $this->middleware = $middleware;
+        return $this->router->registerMiddleware($this->controller, $this->middleware);
     }
 
     /**
@@ -45,7 +49,13 @@ class RouteContext implements RouteContextInterface
      */
     public function useCache(int $ttl, string $key = null): RouteContextInterface
     {
-        $this->router->registerMiddleware($this->controller, new Cache($ttl, $key));
+        if ($this->middleware instanceof MiddlewareChainInterface) {
+            $this->middleware->addMiddleware(new Cache($ttl, $key));
+        } else {
+            $this->middleware = new Cache($ttl, $key);
+        }
+
+        $this->router->registerMiddleware($this->controller, $this->middleware);
         return $this;
     }
 }

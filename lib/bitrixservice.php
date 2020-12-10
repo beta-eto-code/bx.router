@@ -14,6 +14,7 @@ use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\SystemException;
 use Bitrix\Main\UserTable;
 use BX\Router\Interfaces\BitrixServiceInterface;
+use CFile;
 use CUser;
 
 class BitrixService implements BitrixServiceInterface
@@ -143,7 +144,7 @@ class BitrixService implements BitrixServiceInterface
      */
     public function getFileInfo(string $filePath): array
     {
-        return \CFile::MakeFileArray($filePath);
+        return CFile::MakeFileArray($filePath);
     }
 
     /**
@@ -153,6 +154,6 @@ class BitrixService implements BitrixServiceInterface
      */
     public function saveFile(array $fileInfo, string $savePath): int
     {
-        return (int) \CFile::SaveFile($fileInfo, $savePath);
+        return (int) CFile::SaveFile($fileInfo, $savePath);
     }
 }

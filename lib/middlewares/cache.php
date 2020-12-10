@@ -4,15 +4,18 @@
 namespace BX\Router\Middlewares;
 
 
+use BX\Router\Interfaces\MiddlewareChainInterface;
+use BX\Router\Middlewares\Traits\ChainHelper;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Bitrix\Main\Data\Cache as BitrixCache;
 use Throwable;
 
-class Cache implements MiddlewareInterface
+class Cache implements MiddlewareChainInterface
 {
+    use ChainHelper;
+
     const CACHE_DIR = 'router_cache';
     const ALLOW_METHOD = 'get';
 
@@ -71,7 +74,7 @@ class Cache implements MiddlewareInterface
             $response = unserialize($responseData);
         } elseif ($cache->startDataCache()) {
             try {
-                $response = $handler->handle($request);
+                $response = $this->runChain($request, $handler);
                 $responseData = serialize($response);
                 $cache->endDataCache($responseData);
             } catch (Throwable $e) {

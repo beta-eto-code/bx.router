@@ -22,10 +22,10 @@ class ResponseHandler implements ResponseHandlerInterface
     public function handle(ResponseInterface $response)
     {
         $this->setHeaders($response->getHeaders());
-        $status = implode(' ', [
+        /*$status = implode(' ', [
             $response->getStatusCode(),
             $response->getReasonPhrase()
-        ]);
+        ]);*/
         //header("HTTP/{$response->getProtocolVersion()} {$status}");
         echo $response->getBody();
     }

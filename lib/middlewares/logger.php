@@ -4,16 +4,26 @@ namespace BX\Router\Middlewares;
 
 use Bitrix\Main\Type\DateTime;
 use BX\Router\Entities\RouterLogTable;
+use BX\Router\Interfaces\MiddlewareChainInterface;
+use BX\Router\Middlewares\Traits\ChainHelper;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class Logger implements MiddlewareInterface
+class Logger implements MiddlewareChainInterface
 {
+    use ChainHelper;
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
+     * @return ResponseInterface
+     * @throws Exception
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $response = $handler->handle($request);
+        $response = $this->runChain($request, $handler);
         RouterLogTable::add([
             'url' => $request->getRequestTarget(),
             'method' => $request->getMethod(),

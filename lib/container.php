@@ -5,6 +5,7 @@ namespace BX\Router;
 
 
 use Bitrix\Main\DI\ServiceLocator;
+use Bitrix\Main\ObjectNotFoundException;
 use BX\Router\Interfaces\ContainerGetterInterface;
 use BX\Router\Interfaces\ContainerSetterInterface;
 
@@ -20,6 +21,11 @@ class Container implements ContainerSetterInterface, ContainerGetterInterface
         $this->container = ServiceLocator::getInstance();
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws ObjectNotFoundException
+     */
     public function get(string $name)
     {
         return $this->container->get($name);

@@ -3,16 +3,13 @@
 
 namespace BX\Router\Interfaces;
 
-
-use Psr\Http\Server\MiddlewareInterface;
-
 interface RouteContextInterface
 {
     /**
-     * @param MiddlewareInterface $middleware
-     * @return $this
+     * @param MiddlewareChainInterface $middleware
+     * @return MiddlewareChainInterface
      */
-    public function registerMiddleware(MiddlewareInterface $middleware): self;
+    public function registerMiddleware(MiddlewareChainInterface $middleware): MiddlewareChainInterface;
 
     /**
      * @param int $ttl

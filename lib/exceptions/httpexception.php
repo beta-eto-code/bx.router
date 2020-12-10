@@ -9,7 +9,6 @@ use BX\Router\Interfaces\HttpExceptionInterface;
 use Matrix\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Throwable;
 
 class HttpException extends Exception implements HttpExceptionInterface
 {

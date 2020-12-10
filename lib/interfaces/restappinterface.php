@@ -28,10 +28,10 @@ interface RestAppInterface
     public function setResponseHandler(ResponseHandler $responseHandler);
 
     /**
-     * @param MiddlewareInterface $middleware
-     * @return void
+     * @param MiddlewareChainInterface $middleware
+     * @return MiddlewareChainInterface
      */
-    public function registerMiddleware(MiddlewareInterface $middleware);
+    public function registerMiddleware(MiddlewareChainInterface $middleware): MiddlewareChainInterface;
 
     /**
      * @return RouterInterface

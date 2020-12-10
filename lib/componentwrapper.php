@@ -5,8 +5,10 @@ namespace BX\Router;
 
 
 use BX\Router\Interfaces\ComponentWrapperInterface;
+use CBitrixComponent;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
 
 class ComponentWrapper extends BaseController implements ComponentWrapperInterface
 {
@@ -38,9 +40,9 @@ class ComponentWrapper extends BaseController implements ComponentWrapperInterfa
      */
     private function getComponentClass(string $componentName): string
     {
-        $component = new \CBitrixComponent();
+        $component = new CBitrixComponent();
         $component->initComponent($componentName);
-        $reflectionComponent = new \ReflectionClass($component);
+        $reflectionComponent = new ReflectionClass($component);
         $classOfComponent = $reflectionComponent->getProperty('classOfComponent');
         $classOfComponent->setAccessible(true);
 

@@ -8,7 +8,7 @@ use Bitrix\Main\HttpRequest;
 use Bitrix\Main\Routing\Route;
 use Bitrix\Main\Routing\Router;
 use BX\Router\Interfaces\ControllerInterface;
-use Psr\Http\Server\MiddlewareInterface;
+use BX\Router\Interfaces\MiddlewareChainInterface;
 use SplObjectStorage;
 
 class ExtendRouter extends Router
@@ -29,23 +29,21 @@ class ExtendRouter extends Router
 
     /**
      * @param ControllerInterface $controller
-     * @param MiddlewareInterface $middleware
+     * @param MiddlewareChainInterface $middleware
+     * @return MiddlewareChainInterface
      */
-    public function registerMiddleware(ControllerInterface $controller, MiddlewareInterface $middleware)
+    public function registerMiddleware(ControllerInterface $controller, MiddlewareChainInterface $middleware): MiddlewareChainInterface
     {
-        $className = get_class($middleware);
-        $list = $this->getMiddlewaresByController($controller);
-        $list[$className] = $middleware;
-        $this->storage[$controller] = $list;
+        return $this->storage[$controller] = $middleware;
     }
 
     /**
      * @param ControllerInterface $controller
-     * @return MiddlewareInterface[]
+     * @return MiddlewareChainInterface|null
      */
-    public function getMiddlewaresByController(ControllerInterface $controller): array
+    public function getMiddlewaresByController(ControllerInterface $controller): ?MiddlewareChainInterface
     {
-        return $this->storage[$controller] ?? [];
+        return $this->storage[$controller] ?? null;
     }
 
     /**

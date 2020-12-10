@@ -8,13 +8,13 @@ use BX\Router\Bitrix\ExtendRouter;
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\BitrixServiceInterface;
 use BX\Router\Interfaces\ControllerInterface;
+use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Interfaces\RestAppInterface;
 use BX\Router\Interfaces\RouterInterface;
 use BX\Router\PSR7\ServerRequestAdapterPSR;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+use Exception;
 
 class RestApplication implements RestAppInterface
 {
@@ -47,11 +47,10 @@ class RestApplication implements RestAppInterface
      * @var ResponseHandler
      */
     private $responseHandler;
-
     /**
-     * @var MiddlewareInterface[]
+     * @var MiddlewareChainInterface
      */
-    private $middlewares;
+    private $middleware;
 
     public function __construct()
     {
@@ -69,6 +68,9 @@ class RestApplication implements RestAppInterface
         return $this->factory;
     }
 
+    /**
+     * @throws Exception
+     */
     public function run()
     {
         $this->bitrixRouter->releaseRoutes(); // регистрируем внутренние роуты
@@ -84,7 +86,7 @@ class RestApplication implements RestAppInterface
         }
 
         if (!($controller instanceof ControllerInterface)) {
-            new \Exception('Controller must implement BX\Router\Interfaces\ControllerInterface');
+            throw new Exception('Controller must implement BX\Router\Interfaces\ControllerInterface');
         }
 
         $controller->setBitrixService($this->bitrixService);    // пробрасываем сервисы битрикса в контроллер
@@ -96,57 +98,9 @@ class RestApplication implements RestAppInterface
             $request = $request->withAttribute($name, $value);
         }
 
-        $response = null;
-        $newController = $this->makeLazyController($controller);
-        foreach ($this->middlewares as $middleware) {
-            $response = $middleware->process($request, $newController);
-            $newController = $this->getNewHandler($response);
-        }
-
-        if (empty($response)) {
-            $response = $newController->handle($request);
-        }
-
+        $response = $this->executeController($request, $controller);
         $this->responseHandler->handle($response);
         $this->bitrixService->getBxApplication()->terminate();
-    }
-
-    /**
-     * @param ControllerInterface $controller
-     * @return RequestHandlerInterface
-     */
-    private function makeLazyController(ControllerInterface $controller)
-    {
-        $call = function (ServerRequestInterface $request, ControllerInterface $controller) {
-            return $this->executeController($request, $controller);
-        };
-
-        return new class($call, $controller) implements RequestHandlerInterface {
-
-            /**
-             * @var callable
-             */
-            private $call;
-
-            /**
-             * @var ControllerInterface
-             */
-            private $controller;
-
-            public function __construct(
-                callable $call,
-                ControllerInterface $controller
-            ){
-                $this->call = $call;
-                $this->controller = $controller;
-            }
-
-            public function handle(ServerRequestInterface $request): ResponseInterface
-            {
-                $call = $this->call;
-                return $call($request, $this->controller);
-            }
-        };
     }
 
     /**
@@ -156,38 +110,22 @@ class RestApplication implements RestAppInterface
      */
     private function executeController(ServerRequestInterface $request, ControllerInterface $controller): ?ResponseInterface
     {
-        $middlewares = $this->bitrixRouter->getMiddlewaresByController($controller);
-        if (empty($middlewares)) {
+        $middleware = null;
+        if ($this->middleware instanceof MiddlewareChainInterface) {
+            $middleware = clone $this->middleware;
+            $routerMiddleware = $this->bitrixRouter->getMiddlewaresByController($controller);
+            if ($routerMiddleware instanceof MiddlewareChainInterface) {
+                $middleware->addMiddleware($routerMiddleware);
+            }
+        } else {
+            $middleware = $this->bitrixRouter->getMiddlewaresByController($controller);
+        }
+
+        if (empty($middleware)) {
             return $controller->handle($request);
         }
 
-        $response = null;
-        foreach ($middlewares as $key => $middleware) {
-            $response = $middleware->process($request, $controller);
-            $controller = $this->getNewHandler($response);
-        }
-
-        return $response;
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @return RequestHandlerInterface
-     */
-    private function getNewHandler(ResponseInterface $response): RequestHandlerInterface
-    {
-        return new class($response) implements RequestHandlerInterface {
-            private $response;
-
-            public function __construct(ResponseInterface $response) {
-                $this->response = $response;
-            }
-
-            public function handle(ServerRequestInterface $request): ResponseInterface
-            {
-                return $this->response;
-            }
-        };
+        return $middleware->process($request, $controller);
     }
 
     public function setService(string $name, $serviceInstance)
@@ -211,12 +149,11 @@ class RestApplication implements RestAppInterface
     }
 
     /**
-     * @param MiddlewareInterface $middleware
-     * @return void
+     * @param MiddlewareChainInterface $middleware
+     * @return MiddlewareChainInterface
      */
-    public function registerMiddleware(MiddlewareInterface $middleware)
+    public function registerMiddleware(MiddlewareChainInterface $middleware): MiddlewareChainInterface
     {
-        $middlewareClass = get_class($middleware);
-        $this->middlewares[$middlewareClass] = $middleware;
+        return $this->middleware = $middleware;
     }
 }

@@ -21,6 +21,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
+use const UPLOAD_ERR_OK;
 
 class AppFactory implements AppFactoryInterface
 {
@@ -41,7 +42,11 @@ class AppFactory implements AppFactoryInterface
 
     public function createRequest(string $method, $uri): RequestInterface
     {
-        $bitrixRequest = new HttpRequest();
+        $server = clone $this->bitrixService->getBxApplication()->getContext()->getServer();
+        $server->set('REQUEST_METHOD', $method);
+        $server->set('REQUEST_URI', $uri);
+
+        $bitrixRequest = new HttpRequest($server, [], [], [], []);
         $request = new RequestAdapterPSR($bitrixRequest);
 
         return $request->withMethod($method)->withUri($uri);
@@ -55,7 +60,11 @@ class AppFactory implements AppFactoryInterface
 
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
-        $bitrixRequest = new HttpRequest();
+        $server = clone $this->bitrixService->getBxApplication()->getContext()->getServer();
+        $server->set('REQUEST_METHOD', $method);
+        $server->set('REQUEST_URI', $uri);
+
+        $bitrixRequest = new HttpRequest($server, [], [], [], []);
         $bitrixRequest->getServer()->setValues($serverParams);
         $request = new ServerRequestAdapterPSR($bitrixRequest);
 
@@ -80,7 +89,7 @@ class AppFactory implements AppFactoryInterface
     public function createUploadedFile(
         StreamInterface $stream,
         int $size = null,
-        int $error = \UPLOAD_ERR_OK,
+        int $error = UPLOAD_ERR_OK,
         string $clientFilename = null,
         string $clientMediaType = null
     ): UploadedFileInterface
