@@ -5,43 +5,36 @@ namespace BX\Router\Exceptions;
 
 
 use BX\Router\Interfaces\AppFactoryInterface;
-use BX\Router\Interfaces\HttpExceptionInterface;
-use Matrix\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class HttpException extends Exception implements HttpExceptionInterface
+class FormException extends HttpException
 {
+    const PHRASE = 'Invalid form data';
+    const CODE = 400;
+
     /**
-     * @var ServerRequestInterface
+     * @var array
      */
-    protected $request;
-    /**
-     * @var string
-     */
-    protected $phrase;
-    /**
-     * @var AppFactoryInterface
-     */
-    protected $appFactory;
+    private $errors;
 
     public function __construct(
-        string $message,
-        int $code,
-        string $phrase,
         ServerRequestInterface $request = null,
         AppFactoryInterface $appFactory = null
-    )
-    {
-        $this->request = $request;
-        $this->phrase = $phrase;
-        $this->appFactory = $appFactory;
-        parent::__construct($message, $code);
+    ){
+        $this->errors = [];
+        parent::__construct('', static::CODE, static::PHRASE, $request, $appFactory);
     }
 
-    public function getRequest(): ServerRequestInterface
+    /**
+     * @param string $fieldName
+     * @param string $message
+     * @return $this
+     */
+    public function addErrorField(string $fieldName, string $message): self
     {
-        return $this->request;
+        $this->errors[$fieldName] = $message;
+        return $this;
     }
 
     public function getResponse(AppFactoryInterface $appFactory = null): ?ResponseInterface
@@ -54,15 +47,18 @@ class HttpException extends Exception implements HttpExceptionInterface
         $response = $appFactory->createResponse((int)$this->getCode(), $this->phrase);
         $response->getBody()->write(json_encode([
             'error' => true,
-            'errorMessage' => $this->getMessage()
+            'form' => $this->errors
         ], JSON_UNESCAPED_UNICODE));
 
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
 
-    public function setRequest(ServerRequestInterface $request)
+    /**
+     * @return bool
+     */
+    public function hasErrors(): bool
     {
-        $this->request = $request;
+        return !empty($this->errors);
     }
 }
