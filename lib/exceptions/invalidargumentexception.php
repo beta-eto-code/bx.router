@@ -14,6 +14,6 @@ class InvalidArgumentException extends HttpException
         ServerRequestInterface $request = null,
         AppFactoryInterface $appFactory = null
     ){
-        parent::__construct($message, 500, 'Invalid argument', $request, $appFactory);
+        parent::__construct($message, 400, 'Invalid argument', $request, $appFactory);
     }
 }
