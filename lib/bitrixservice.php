@@ -80,6 +80,11 @@ class BitrixService implements BitrixServiceInterface
         return $this->userTable = new UserTable();
     }
 
+    public function includeModule(string $moduleName)
+    {
+        Loader::includeModule($moduleName);
+    }
+
     public function getIblockElementManager(string $type, string $code)
     {
         // TODO: Implement getIblockElementManager() method.
@@ -128,7 +133,8 @@ class BitrixService implements BitrixServiceInterface
         if (!empty($this->hlList[$tableName])) {
             return $this->hlList[$tableName];
         }
-        Loader::includeModule('highloadblock');
+
+        $this->includeModule('highloadblock');
         $hlData = HighloadBlockTable::getRow([
             'filter' => [
                 '=TABLE_NAME' => $tableName,

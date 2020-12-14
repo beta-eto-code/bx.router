@@ -21,6 +21,11 @@ interface BitrixServiceInterface
     public function getCUser();
 
     /**
+     * @return void
+     */
+    public function includeModule(string $moduleName);
+
+    /**
      * @return UserTable
      */
     public function getUserTable();
