@@ -53,15 +53,47 @@ class ServerRequestAdapterPSR extends RequestAdapterPSR implements ServerRequest
      */
     public function getUploadedFiles()
     {
-        return array_map(function (array $value) {
+        return array_map(function (array $file) {
+            if (is_array($file['tmp_name'])) {
+                $result = [];
+                for ($i = 0; $i < count($file['tmp_name']); $i++) {
+                    $result[$i] = new UploadedFile(
+                        $file['tmp_name'][$i],
+                        (int)$file['size'][$i],
+                        (int)$file['error'][$i],
+                        $file['name'][$i],
+                        $file['type'][$i]
+                    );
+                }
+
+                return $result;
+            }
             return new UploadedFile(
-                $value['tmp_name'],
-                (int) $value['size'],
-                (int) $value['error'],
-                $value['name'],
-                $value['type']
+                $file['tmp_name'],
+                (int) $file['size'],
+                (int) $file['error'],
+                $file['name'],
+                $file['type']
             );
         }, $this->request->getFileList()->toArray());
+    }
+
+    private function getFileList(): array
+    {
+        $fileList = [];
+        foreach ($this->request->getFileList() as $key => $file) {
+            foreach ($file as $k => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $i => $v) {
+                        $fileList[$key][$i][$k] = $v;
+                    }
+                } else {
+                    $fileList[$key][$k] = $v;
+                }
+            }
+        }
+
+        return $fileList;
     }
 
     /**
