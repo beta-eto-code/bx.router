@@ -102,7 +102,13 @@ class Message implements MessageInterface
      */
     public function getHeaders()
     {
-        return $this->request->getHeaders()->toArray();
+        $headers = $this->request->getHeaders()->toArray();
+        foreach ($headers as &$value) {
+            $value = (array)($value ?? []);
+        }
+        unset($value);
+
+        return $headers;
     }
 
     /**
@@ -116,7 +122,7 @@ class Message implements MessageInterface
 
     public function getHeader($name)
     {
-        return $this->request->getHeader($name);
+        return (array)($this->request->getHeader($name) ?? []);
     }
 
     /**
@@ -130,7 +136,7 @@ class Message implements MessageInterface
             return '';
         }
 
-        return implode(',', $value);
+        return implode(',', (array)$value);
     }
 
     /**
