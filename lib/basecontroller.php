@@ -58,7 +58,7 @@ abstract class BaseController implements ControllerInterface
         return $data[$field] ?? null;
     }
 
-    private function getParsedPostData(ServerRequestInterface $request): array
+    protected function getParsedPostData(ServerRequestInterface $request): array
     {
         if (isset($this->postData[$request])) {
             return $this->postData[$request];

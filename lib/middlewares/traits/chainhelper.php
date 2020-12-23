@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use SplObjectStorage;
 
 trait ChainHelper
 {
@@ -15,6 +16,7 @@ trait ChainHelper
      * @var MiddlewareChainInterface
      */
     protected $middleware;
+    protected $store;
 
     /**
      * @param MiddlewareChainInterface $middleware
@@ -22,11 +24,23 @@ trait ChainHelper
      */
     public function addMiddleware(MiddlewareChainInterface $middleware): MiddlewareChainInterface
     {
-        if ($this->middleware instanceof MiddlewareChainInterface) {
-            return $this->middleware->addMiddleware($middleware);
+        if (empty($this->store)) {
+            $this->store = new SplObjectStorage();  // для избежания циклических зависимостей
         }
 
-        return $this->middleware = $middleware;
+        if ($this->store->contains($middleware)) {
+            return $this;
+        }
+
+        $this->store->rewind();
+        $internal = $this->store->current();
+        if ($internal instanceof MiddlewareChainInterface) {
+            return $internal->addMiddleware($middleware);
+        }
+
+        $this->store->attach($middleware);
+
+        return $this;
     }
 
     /**
@@ -34,7 +48,12 @@ trait ChainHelper
      */
     public function getMiddleware(): ?MiddlewareChainInterface
     {
-        return $this->middleware;
+        if (empty($this->store)) {
+            return null;
+        }
+
+        $this->store->rewind();
+        return $this->store->current();
     }
 
     protected function runChain(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
