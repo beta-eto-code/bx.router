@@ -6,7 +6,7 @@ namespace BX\Router\Exceptions;
 
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\HttpExceptionInterface;
-use Matrix\Exception;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
