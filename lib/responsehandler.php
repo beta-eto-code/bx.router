@@ -5,6 +5,7 @@ namespace BX\Router;
 
 
 use BX\Router\Interfaces\ResponseHandlerInterface;
+use CHTTP;
 use Psr\Http\Message\ResponseInterface;
 
 class ResponseHandler implements ResponseHandlerInterface
@@ -15,7 +16,12 @@ class ResponseHandler implements ResponseHandlerInterface
             $key = $item['name'];
             $value = $item['values'];
             $value = trim(is_array($value) ? implode(',', $value) : $value);
-            header("{$key}: {$value}");
+
+            if (strtolower($key) === 'status') {
+                CHTTP::SetStatus($value);
+            } else {
+                header("{$key}: {$value}");
+            }
         }
     }
 
