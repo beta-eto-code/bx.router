@@ -9,11 +9,13 @@
             "email": "alex19pov31@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "psr/http-message": "^1.0",
         "psr/http-factory": "^1.0",
         "psr/http-server-handler": "^1.0",
-        "psr/http-server-middleware": "^1.0"
+        "psr/http-server-middleware": "^1.0",
+        "beta/bx.jwt": "dev-master"
     },
     "repositories": [
         {
