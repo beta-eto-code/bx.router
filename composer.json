@@ -1,8 +1,24 @@
 {
+    "name": "beta/bx.router",
+    "description": "Routing for Bitrix app",
+    "type": "bitrix-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Nesterov",
+            "email": "alex19pov31@gmail.com"
+        }
+    ],
     "require": {
         "psr/http-message": "^1.0",
         "psr/http-factory": "^1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@cvs.beta.agency:nesterov/bx.jwt.git"
+        }
+    ]
 }
