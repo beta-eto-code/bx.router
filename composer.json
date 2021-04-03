@@ -16,11 +16,5 @@
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "beta/bx.jwt": "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@cvs.beta.agency:nesterov/bx.jwt.git"
-        }
-    ]
+    }
 }
