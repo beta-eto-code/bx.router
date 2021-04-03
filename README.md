@@ -1,5 +1,10 @@
 # Роутер для bitrix (PSR-7, PSR-15, PSR-17 implementation)
 
+### Установка
+
+```
+composer require beta/bx.jwt
+```
 
 ### Пример инициализации приложения:
 
