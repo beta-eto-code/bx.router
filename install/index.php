@@ -1,6 +1,8 @@
 <?
 
 IncludeModuleLangFile(__FILE__);
+
+use Bitrix\Main\Loader;
 use Bitrix\Main\ModuleManager;
 use BX\Router\Entities\RouterLogTable;
 use Bitrix\Main\Application;
@@ -22,35 +24,33 @@ class bx_router extends CModule
         $this->MODULE_DESCRIPTION = "Роутер";
     }
 
-    private function requireEntityFile(string $entityName)
-    {
-        $root = Application::getDocumentRoot();
-        $pathFromBitrix = "{$root}/bitrix/modules/{$this->MODULE_ID}/lib/entities/".strtolower($entityName).'.php';
-        if (file_exists($pathFromBitrix)) {
-            require_once $pathFromBitrix;
-            return;
-        }
-
-        $pathFromLocal = "{$root}/local/modules/{$this->MODULE_ID}/lib/entities/".strtolower($entityName).'.php';
-        if (file_exists($pathFromLocal)) {
-            require_once $pathFromLocal;
-            return;
-        }
-    }
-
     public function DoInstall()
     {
-        $this->requireEntityFile('RouterLogTable');
-        RouterLogTable::getEntity()->createDbTable();
         ModuleManager::RegisterModule($this->MODULE_ID);
+        $this->InstallDB();
         return true;
+    }
+
+    public function InstallDB()
+    {
+        if(!Loader::includeModule($this->MODULE_ID)){
+            return false;
+        }
+        RouterLogTable::getEntity()->createDbTable();
     }
 
     public function DoUninstall()
     {
-        $this->requireEntityFile('RouterLogTable');
-        Application::getConnection()->dropTable(RouterLogTable::getTableName());
+        $this->UnInstallDB();
         ModuleManager::UnRegisterModule($this->MODULE_ID);
         return true;
+    }
+
+    public function UnInstallDB()
+    {
+        if(!Loader::includeModule($this->MODULE_ID)){
+            return false;
+        }
+        Application::getConnection()->dropTable(RouterLogTable::getTableName());
     }
 }
