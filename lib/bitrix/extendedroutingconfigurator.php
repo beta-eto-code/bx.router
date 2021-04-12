@@ -19,6 +19,7 @@ use Bitrix\Main\Routing\RoutingConfigurator;
  * @method RoutingConfiguration default($parameter, $value)
  *
  * @method RoutingConfiguration get($uri, $controller)
+ * @method RoutingConfiguration head($uri, $controller)
  * @method RoutingConfiguration post($uri, $controller)
  * @method RoutingConfiguration put($uri, $controller)
  * @method RoutingConfiguration delete($uri, $controller)

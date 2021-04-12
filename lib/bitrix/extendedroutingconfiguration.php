@@ -8,8 +8,18 @@ use Bitrix\Main\Routing\RoutingConfiguration;
 class ExtendedRoutingConfiguration extends RoutingConfiguration
 {
     public static $configurationList = [
-        'get', 'post', 'put', 'delete', 'any', 'group'
+        'get', 'post', 'put', 'delete', 'head', 'any', 'group'
     ];
+
+    public function head($uri, $controller)
+    {
+        $this->options->methods(['HEAD']);
+
+        $route = new Route($uri, $controller);
+        $this->routeContainer = $route;
+
+        return $this;
+    }
 
     public function put($uri, $controller)
     {
