@@ -4,7 +4,6 @@
 namespace BX\Router\Interfaces;
 
 use BX\Router\ResponseHandler;
-use Psr\Http\Server\MiddlewareInterface;
 
 interface RestAppInterface
 {

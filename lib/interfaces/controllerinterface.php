@@ -10,19 +10,19 @@ interface ControllerInterface extends RequestHandlerInterface
 {
     /**
      * @param BitrixServiceInterface $bitrixService
-     * @return mixed
+     * @return void
      */
     public function setBitrixService(BitrixServiceInterface $bitrixService);
 
     /**
      * @param AppFactoryInterface $appFactory
-     * @return mixed
+     * @return void
      */
     public function setAppFactory(AppFactoryInterface $appFactory);
 
     /**
      * @param ContainerGetterInterface $containerGetter
-     * @return mixed
+     * @return void
      */
     public function setContainer(ContainerGetterInterface $containerGetter);
 }
