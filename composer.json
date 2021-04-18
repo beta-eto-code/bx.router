@@ -15,6 +15,18 @@
         "psr/http-factory": "^1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
-        "beta/bx.jwt": "dev-master"
-    }
+        "beta/bx.jwt": "dev-master",
+        "beta/bitrix-psr7": "dev-master",
+        "beta/bitrix-psr17": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@cvs.beta.agency:nesterov/bitrix-psr7"
+        },
+        {
+            "type": "vcs",
+            "url": "git@cvs.beta.agency:nesterov/bitrix-psr17"
+        }
+    ]
 }

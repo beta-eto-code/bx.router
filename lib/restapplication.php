@@ -4,6 +4,7 @@ namespace BX\Router;
 
 use Bitrix\Main\Application;
 use Bitrix\Main\DI\ServiceLocator;
+use BitrixPSR7\ServerRequest;
 use BX\Router\Bitrix\ExtendRouter;
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\BitrixServiceInterface;
@@ -11,7 +12,6 @@ use BX\Router\Interfaces\ControllerInterface;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Interfaces\RestAppInterface;
 use BX\Router\Interfaces\RouterInterface;
-use BX\Router\PSR7\ServerRequestAdapterPSR;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Exception;
@@ -98,7 +98,7 @@ class RestApplication implements RestAppInterface
         $controller->setAppFactory($this->factory);             // пробрасываем фабрику psr 17 в контроллер
         $controller->setContainer($this->container);            // пробрасываем контейнер (di - внешние сервисы) в контроллер
 
-        $request = new ServerRequestAdapterPSR($bitrixRequest);
+        $request = new ServerRequest($bitrixRequest);
         foreach ($route->getParametersValues() as $name => $value) {
             $request = $request->withAttribute($name, $value);
         }

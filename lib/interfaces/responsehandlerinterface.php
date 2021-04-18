@@ -9,7 +9,7 @@ interface ResponseHandlerInterface
 {
     /**
      * @param ResponseInterface $response
-     * @return mixed
+     * @return void
      */
     public function handle(ResponseInterface $response);
 }

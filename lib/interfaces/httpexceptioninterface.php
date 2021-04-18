@@ -12,7 +12,7 @@ interface HttpExceptionInterface extends Throwable
 {
     /**
      * @param ServerRequestInterface $request
-     * @return mixed
+     * @return void
      */
     public function setRequest(ServerRequestInterface $request);
 
@@ -23,7 +23,7 @@ interface HttpExceptionInterface extends Throwable
 
     /**
      * @param AppFactoryInterface|null $appFactory
-     * @return ResponseInterface
+     * @return ResponseInterface|null
      */
     public function getResponse(AppFactoryInterface $appFactory = null): ?ResponseInterface;
 }

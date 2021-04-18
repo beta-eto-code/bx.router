@@ -6,15 +6,11 @@ namespace BX\Router;
 
 use Bitrix\Main\HttpRequest;
 use Bitrix\Main\HttpResponse;
+use BitrixPSR17\HttpFactory;
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\BitrixServiceInterface;
 use BX\Router\Interfaces\ComponentWrapperInterface;
 use BX\Router\Interfaces\ContainerGetterInterface;
-use BX\Router\PSR7\RequestAdapterPSR;
-use BX\Router\PSR7\ResponseAdapterPSR;
-use BX\Router\PSR7\ServerRequestAdapterPSR;
-use BX\Router\PSR7\UploadedFile;
-use BX\Router\PSR7\Uri;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -33,59 +29,85 @@ class AppFactory implements AppFactoryInterface
      * @var ContainerGetterInterface
      */
     private $containerGetter;
+    /**
+     * @var HttpFactory
+     */
+    private $httpFactory;
 
     public function __construct(BitrixServiceInterface $bitrixService, ContainerGetterInterface $containerGetter)
     {
         $this->bitrixService = $bitrixService;
+        $this->httpFactory = new HttpFactory();
         $this->containerGetter = $containerGetter;
     }
 
+    /**
+     * @param string $method
+     * @param UriInterface|string $uri
+     * @return RequestInterface
+     */
     public function createRequest(string $method, $uri): RequestInterface
     {
-        $server = clone $this->bitrixService->getBxApplication()->getContext()->getServer();
-        $server->set('REQUEST_METHOD', $method);
-        $server->set('REQUEST_URI', $uri);
-
-        $bitrixRequest = new HttpRequest($server, [], [], [], []);
-        $request = new RequestAdapterPSR($bitrixRequest);
-
-        return $request->withMethod($method)->withUri($uri);
+        return $this->httpFactory->createRequest($method, $uri);
     }
 
+    /**
+     * @param int $code
+     * @param string $reasonPhrase
+     * @return ResponseInterface
+     */
     public function createResponse(int $code = 200, string $reasonPhrase = ''): ResponseInterface
     {
-        $resp = new HttpResponse();
-        return (new ResponseAdapterPSR($resp))->withStatus($code, $reasonPhrase);
+        return $this->httpFactory->createResponse($code, $reasonPhrase);
     }
 
+    /**
+     * @param string $method
+     * @param UriInterface|string $uri
+     * @param array $serverParams
+     * @return ServerRequestInterface
+     */
     public function createServerRequest(string $method, $uri, array $serverParams = []): ServerRequestInterface
     {
-        $server = clone $this->bitrixService->getBxApplication()->getContext()->getServer();
-        $server->set('REQUEST_METHOD', $method);
-        $server->set('REQUEST_URI', $uri);
-
-        $bitrixRequest = new HttpRequest($server, [], [], [], []);
-        $bitrixRequest->getServer()->setValues($serverParams);
-        $request = new ServerRequestAdapterPSR($bitrixRequest);
-
-        return $request->withMethod($method)->withUri($uri);
+        return $this->httpFactory->createServerRequest($method, $uri, $serverParams);
     }
 
+    /**
+     * @param string $content
+     * @return StreamInterface
+     */
     public function createStream(string $content = ''): StreamInterface
     {
-        return stream_for($content);
+        return $this->httpFactory->createStream($content);
     }
 
+    /**
+     * @param string $filename
+     * @param string $mode
+     * @return StreamInterface
+     */
     public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
     {
-        return stream_for($filename);
+        return $this->httpFactory->createStreamFromFile($filename, $mode);
     }
 
+    /**
+     * @param resource $resource
+     * @return StreamInterface
+     */
     public function createStreamFromResource($resource): StreamInterface
     {
-        return stream_for($resource);
+        return $this->httpFactory->createStreamFromResource($resource);
     }
 
+    /**
+     * @param StreamInterface $stream
+     * @param int|null $size
+     * @param int $error
+     * @param string|null $clientFilename
+     * @param string|null $clientMediaType
+     * @return UploadedFileInterface
+     */
     public function createUploadedFile(
         StreamInterface $stream,
         int $size = null,
@@ -94,15 +116,29 @@ class AppFactory implements AppFactoryInterface
         string $clientMediaType = null
     ): UploadedFileInterface
     {
-        return new UploadedFile($stream, $size, $error, $clientFilename, $clientMediaType);
+        return $this->httpFactory->createUploadedFile($stream, $size, $error, $clientFilename, $clientMediaType);
     }
 
+    /**
+     * @param string $uri
+     * @return UriInterface
+     */
     public function createUri(string $uri = ''): UriInterface
     {
-        return new Uri($uri);
+        return $this->createUri($uri);
     }
 
-    public function createComponentWrapper(string $componentName, string $templateName = '', array $params = []): ComponentWrapperInterface
+    /**
+     * @param string $componentName
+     * @param string $templateName
+     * @param array $params
+     * @return ComponentWrapperInterface
+     */
+    public function createComponentWrapper(
+        string $componentName,
+        string $templateName = '',
+        array $params = []
+    ): ComponentWrapperInterface
     {
         $wrapper = new ComponentWrapper($componentName, $templateName, $params);
         $wrapper->setAppFactory($this);
