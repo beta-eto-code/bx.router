@@ -11,6 +11,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
         "psr/http-message": "^1.0",
         "psr/http-factory": "^1.0",
         "psr/http-server-handler": "^1.0",
