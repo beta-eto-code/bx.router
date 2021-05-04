@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2786ddc618a04ca19f4c2eb095d544d0",
+    "content-hash": "ce4d63273ab35668d01c2c6255594d1a",
     "packages": [
         {
             "name": "beta/bitrix-psr17",
@@ -37,7 +37,7 @@
             "source": {
                 "type": "git",
                 "url": "git@cvs.beta.agency:nesterov/bitrix-psr7",
-                "reference": "9eae2b7a6612f77703d0644f182b7afe5fb1384d"
+                "reference": "76ea3a9612df343662a1dae6d2437ab5499937fc"
             },
             "require": {
                 "guzzlehttp/psr7": "^1.8",
@@ -60,7 +60,7 @@
                 }
             ],
             "description": "PSR-7 adapter for Bitrix",
-            "time": "2021-04-14T12:58:58+00:00"
+            "time": "2021-05-04T09:52:38+00:00"
         },
         {
             "name": "beta/bx.jwt",
@@ -104,12 +104,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/beta-eto-code/bx.model.git",
-                "reference": "83b326680984ad5f68720243b5e430930e909e2a"
+                "reference": "81a08ae89a449147fa00922390dc7e45f1b83af4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beta-eto-code/bx.model/zipball/83b326680984ad5f68720243b5e430930e909e2a",
-                "reference": "83b326680984ad5f68720243b5e430930e909e2a",
+                "url": "https://api.github.com/repos/beta-eto-code/bx.model/zipball/81a08ae89a449147fa00922390dc7e45f1b83af4",
+                "reference": "81a08ae89a449147fa00922390dc7e45f1b83af4",
                 "shasum": ""
             },
             "default-branch": true,
@@ -126,9 +126,9 @@
             ],
             "support": {
                 "issues": "https://github.com/beta-eto-code/bx.model/issues",
-                "source": "https://github.com/beta-eto-code/bx.model/tree/0.1.0"
+                "source": "https://github.com/beta-eto-code/bx.model/tree/master"
             },
-            "time": "2021-04-03T12:38:15+00:00"
+            "time": "2021-05-04T08:10:29+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -136,12 +136,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "359b1f4a6fc1f3b97f8ea8ffd5a576f4f5151cff"
+                "reference": "dc960a912984efb74d0a90222870c72c87f10c91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/359b1f4a6fc1f3b97f8ea8ffd5a576f4f5151cff",
-                "reference": "359b1f4a6fc1f3b97f8ea8ffd5a576f4f5151cff",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/dc960a912984efb74d0a90222870c72c87f10c91",
+                "reference": "dc960a912984efb74d0a90222870c72c87f10c91",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +203,7 @@
                 "issues": "https://github.com/guzzle/psr7/issues",
                 "source": "https://github.com/guzzle/psr7/tree/1.x"
             },
-            "time": "2021-03-21T17:21:22+00:00"
+            "time": "2021-04-26T09:17:50+00:00"
         },
         {
             "name": "psr/http-factory",
@@ -485,7 +485,10 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=7.2",
+        "ext-json": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
 }
