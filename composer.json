@@ -24,11 +24,11 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@cvs.beta.agency:nesterov/bitrix-psr7"
+            "url": "git@github.com:beta-eto-code/bitrix-psr7.git"
         },
         {
             "type": "vcs",
-            "url": "git@cvs.beta.agency:nesterov/bitrix-psr17"
+            "url": "git@github.com:beta-eto-code/bitrix-psr17.git"
         }
     ]
 }
