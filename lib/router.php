@@ -10,6 +10,7 @@ use BX\Router\Interfaces\ControllerInterface;
 use BX\Router\Interfaces\RouteContextInterface;
 use BX\Router\Interfaces\RouterInterface;
 use BX\Router\Bitrix\ExtendRouter;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -58,7 +59,7 @@ class Router implements RouterInterface
         $proxyController = new ProxyController(
             $controller,
             function (ServerRequestInterface $request, ResponseInterface $response) {
-                return $response->withBody(stream_for(''));
+                return $response->withBody(Utils::streamFor(''));
             });
 
         $this->configurator->head($uri, $proxyController);
