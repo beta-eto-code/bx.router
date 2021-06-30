@@ -3,7 +3,7 @@
 ### Установка
 
 ```
-composer require beta/bx.jwt
+composer require beta/bx.router
 ```
 
 ### Пример инициализации приложения:
