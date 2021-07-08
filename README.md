@@ -11,10 +11,16 @@ composer require beta/bx.router
 ```php
 use BX\Router\RestApplication;
 use BX\Router\Middlewares\Logger;
-
+use BX\Router\Middlewares\UseBitrixCookies;
+use BX\Router\Middlewares\HttpException;
 
 $app = new RestApplication();
 $router = $app->getRouter();
+
+$defaultMiddleware = new UseBitrixCookies(); // подставляет куки из bitrix в запрос
+$defaultMiddleware->addMiddleware(new HttpException($app->getFactory())); // добавляем обработчик ошибок
+
+$app->registerMiddleware($defaultMiddleware); // регистрируем цепочку middleware 
 
 $app->setResponseHandler(new CustomResponseHandler);    // Устанавливаем собственный обработчик ответа
 $app->setService('jwt', new UserTokenService());        // Регистрируем внешний сервис для доступа из контроллера
