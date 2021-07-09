@@ -20,15 +20,5 @@
         "beta/bx.jwt": "dev-master",
         "beta/bitrix-psr7": "dev-master",
         "beta/bitrix-psr17": "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:beta-eto-code/bitrix-psr7.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:beta-eto-code/bitrix-psr17.git"
-        }
-    ]
+    }
 }
