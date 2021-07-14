@@ -4,68 +4,68 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d55ab382720d178ebefe30093b45e833",
+    "content-hash": "07450f02e94dce758b8b51ff23b702a0",
     "packages": [
         {
             "name": "beta/bitrix-psr17",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beta-eto-code/bitrix-psr17.git",
-                "reference": "a274228c67fb1a15c6cc8f9e9c4a595ffe9513f6"
+                "reference": "b14727303ff95242f365252e167cdd6bc3fe9300"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beta-eto-code/bitrix-psr17/zipball/a274228c67fb1a15c6cc8f9e9c4a595ffe9513f6",
-                "reference": "a274228c67fb1a15c6cc8f9e9c4a595ffe9513f6",
+                "url": "https://api.github.com/repos/beta-eto-code/bitrix-psr17/zipball/b14727303ff95242f365252e167cdd6bc3fe9300",
+                "reference": "b14727303ff95242f365252e167cdd6bc3fe9300",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.8",
                 "psr/http-factory": "^1.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "BitrixPSR17\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "PSR-17 implementation for Bitrix",
             "support": {
-                "source": "https://github.com/beta-eto-code/bitrix-psr17/tree/0.1.0",
-                "issues": "https://github.com/beta-eto-code/bitrix-psr17/issues"
+                "issues": "https://github.com/beta-eto-code/bitrix-psr17/issues",
+                "source": "https://github.com/beta-eto-code/bitrix-psr17/tree/1.0.0"
             },
-            "time": "2021-04-18T16:46:12+00:00"
+            "time": "2021-05-24T18:17:03+00:00"
         },
         {
             "name": "beta/bitrix-psr7",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beta-eto-code/bitrix-psr7.git",
-                "reference": "76ea3a9612df343662a1dae6d2437ab5499937fc"
+                "reference": "a1ade03612dc3ed330296f481c49f9e7d4e98bcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beta-eto-code/bitrix-psr7/zipball/76ea3a9612df343662a1dae6d2437ab5499937fc",
-                "reference": "76ea3a9612df343662a1dae6d2437ab5499937fc",
+                "url": "https://api.github.com/repos/beta-eto-code/bitrix-psr7/zipball/a1ade03612dc3ed330296f481c49f9e7d4e98bcb",
+                "reference": "a1ade03612dc3ed330296f481c49f9e7d4e98bcb",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.8",
                 "php": ">=7.2"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "BitrixPSR7\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -77,62 +77,25 @@
             ],
             "description": "PSR-7 adapter for Bitrix",
             "support": {
-                "source": "https://github.com/beta-eto-code/bitrix-psr7/tree/0.1.1",
-                "issues": "https://github.com/beta-eto-code/bitrix-psr7/issues"
+                "issues": "https://github.com/beta-eto-code/bitrix-psr7/issues",
+                "source": "https://github.com/beta-eto-code/bitrix-psr7/tree/1.0.0"
             },
-            "time": "2021-05-04T09:52:38+00:00"
-        },
-        {
-            "name": "beta/bx.jwt",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/beta-eto-code/bx.jwt.git",
-                "reference": "be66e6609d84296c26fc544733b5f82fda5ae9a8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/beta-eto-code/bx.jwt/zipball/be66e6609d84296c26fc544733b5f82fda5ae9a8",
-                "reference": "be66e6609d84296c26fc544733b5f82fda5ae9a8",
-                "shasum": ""
-            },
-            "require": {
-                "beta/bx.model": "dev-master"
-            },
-            "default-branch": true,
-            "type": "bitrix-module",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexander Nesterov",
-                    "email": "alex19pov31@gmail.com"
-                }
-            ],
-            "description": "JWT tokens for Bitrix app",
-            "support": {
-                "issues": "https://github.com/beta-eto-code/bx.jwt/issues",
-                "source": "https://github.com/beta-eto-code/bx.jwt/tree/0.1.0"
-            },
-            "time": "2021-04-03T12:33:31+00:00"
+            "time": "2021-05-24T18:11:58+00:00"
         },
         {
             "name": "beta/bx.model",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beta-eto-code/bx.model.git",
-                "reference": "ad814c2738ebb0a853fdf3145043fe1761ef8c88"
+                "reference": "8d7446eee24bcd798150b1eccd5d52571c737539"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beta-eto-code/bx.model/zipball/ad814c2738ebb0a853fdf3145043fe1761ef8c88",
-                "reference": "ad814c2738ebb0a853fdf3145043fe1761ef8c88",
+                "url": "https://api.github.com/repos/beta-eto-code/bx.model/zipball/8d7446eee24bcd798150b1eccd5d52571c737539",
+                "reference": "8d7446eee24bcd798150b1eccd5d52571c737539",
                 "shasum": ""
             },
-            "default-branch": true,
             "type": "bitrix-module",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -146,13 +109,13 @@
             ],
             "support": {
                 "issues": "https://github.com/beta-eto-code/bx.model/issues",
-                "source": "https://github.com/beta-eto-code/bx.model/tree/master"
+                "source": "https://github.com/beta-eto-code/bx.model/tree/1.0.0"
             },
-            "time": "2021-05-18T08:41:24+00:00"
+            "time": "2021-07-14T16:22:19+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.x-dev",
+            "version": "1.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
@@ -221,29 +184,28 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/1.x"
+                "source": "https://github.com/guzzle/psr7/tree/1.8.2"
             },
             "time": "2021-04-26T09:17:50+00:00"
         },
         {
             "name": "psr/http-factory",
-            "version": "dev-master",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-factory.git",
-                "reference": "36fa03d50ff82abcae81860bdaf4ed9a1510c7cd"
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/36fa03d50ff82abcae81860bdaf4ed9a1510c7cd",
-                "reference": "36fa03d50ff82abcae81860bdaf4ed9a1510c7cd",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0",
                 "psr/http-message": "^1.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -262,7 +224,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
             "description": "Common interfaces for PSR-7 HTTP message factories",
@@ -279,26 +241,25 @@
             "support": {
                 "source": "https://github.com/php-fig/http-factory/tree/master"
             },
-            "time": "2020-09-17T16:52:55+00:00"
+            "time": "2019-04-30T12:38:16+00:00"
         },
         {
             "name": "psr/http-message",
-            "version": "dev-master",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "efd67d1dc14a7ef4fc4e518e7dee91c271d524e4"
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/efd67d1dc14a7ef4fc4e518e7dee91c271d524e4",
-                "reference": "efd67d1dc14a7ef4fc4e518e7dee91c271d524e4",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -333,27 +294,26 @@
             "support": {
                 "source": "https://github.com/php-fig/http-message/tree/master"
             },
-            "time": "2019-08-29T13:16:46+00:00"
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "psr/http-server-handler",
-            "version": "dev-master",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-server-handler.git",
-                "reference": "cada5cd1c6a9871031e07f26d0f7b08c9de19039"
+                "reference": "aff2f80e33b7f026ec96bb42f63242dc50ffcae7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-server-handler/zipball/cada5cd1c6a9871031e07f26d0f7b08c9de19039",
-                "reference": "cada5cd1c6a9871031e07f26d0f7b08c9de19039",
+                "url": "https://api.github.com/repos/php-fig/http-server-handler/zipball/aff2f80e33b7f026ec96bb42f63242dc50ffcae7",
+                "reference": "aff2f80e33b7f026ec96bb42f63242dc50ffcae7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0",
                 "psr/http-message": "^1.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -372,7 +332,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for HTTP server-side request handler",
@@ -388,22 +348,23 @@
                 "server"
             ],
             "support": {
+                "issues": "https://github.com/php-fig/http-server-handler/issues",
                 "source": "https://github.com/php-fig/http-server-handler/tree/master"
             },
-            "time": "2020-09-17T16:52:43+00:00"
+            "time": "2018-10-30T16:46:14+00:00"
         },
         {
             "name": "psr/http-server-middleware",
-            "version": "dev-master",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-server-middleware.git",
-                "reference": "adcb26d2fb28018fea3319d0035e46e8d08eb8c8"
+                "reference": "2296f45510945530b9dceb8bcedb5cb84d40c5f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-server-middleware/zipball/adcb26d2fb28018fea3319d0035e46e8d08eb8c8",
-                "reference": "adcb26d2fb28018fea3319d0035e46e8d08eb8c8",
+                "url": "https://api.github.com/repos/php-fig/http-server-middleware/zipball/2296f45510945530b9dceb8bcedb5cb84d40c5f5",
+                "reference": "2296f45510945530b9dceb8bcedb5cb84d40c5f5",
                 "shasum": ""
             },
             "require": {
@@ -411,7 +372,6 @@
                 "psr/http-message": "^1.0",
                 "psr/http-server-handler": "^1.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -430,7 +390,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for HTTP server-side middleware",
@@ -448,7 +408,7 @@
                 "issues": "https://github.com/php-fig/http-server-middleware/issues",
                 "source": "https://github.com/php-fig/http-server-middleware/tree/master"
             },
-            "time": "2020-09-17T16:41:19+00:00"
+            "time": "2018-10-30T17:12:04+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -497,12 +457,8 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "beta/bx.jwt": 20,
-        "beta/bitrix-psr7": 20,
-        "beta/bitrix-psr17": 20
-    },
+    "minimum-stability": "stable",
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -510,5 +466,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
