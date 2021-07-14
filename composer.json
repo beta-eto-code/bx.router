@@ -9,7 +9,6 @@
             "email": "alex19pov31@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=7.2",
         "ext-json": "*",
@@ -17,8 +16,8 @@
         "psr/http-factory": "^1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
-        "beta/bx.jwt": "dev-master",
-        "beta/bitrix-psr7": "dev-master",
-        "beta/bitrix-psr17": "dev-master"
+        "beta/bx.model": "^1.0",
+        "beta/bitrix-psr7": "^1.0",
+        "beta/bitrix-psr17": "^1.0"
     }
 }
