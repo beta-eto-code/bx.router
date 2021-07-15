@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07450f02e94dce758b8b51ff23b702a0",
+    "content-hash": "d3d5a5e8d7254d4ceca14eb8f21c3b4b",
     "packages": [
         {
             "name": "beta/bitrix-psr17",
@@ -81,6 +81,41 @@
                 "source": "https://github.com/beta-eto-code/bitrix-psr7/tree/1.0.0"
             },
             "time": "2021-05-24T18:11:58+00:00"
+        },
+        {
+            "name": "beta/bx.jwt",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beta-eto-code/bx.jwt.git",
+                "reference": "1b89a084b50a0e67c808d5a5798f6e027a6fd79d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beta-eto-code/bx.jwt/zipball/1b89a084b50a0e67c808d5a5798f6e027a6fd79d",
+                "reference": "1b89a084b50a0e67c808d5a5798f6e027a6fd79d",
+                "shasum": ""
+            },
+            "require": {
+                "beta/bx.model": "^1.0"
+            },
+            "type": "bitrix-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Nesterov",
+                    "email": "alex19pov31@gmail.com"
+                }
+            ],
+            "description": "JWT tokens for Bitrix app",
+            "support": {
+                "issues": "https://github.com/beta-eto-code/bx.jwt/issues",
+                "source": "https://github.com/beta-eto-code/bx.jwt/tree/1.0.0"
+            },
+            "time": "2021-07-14T18:49:26+00:00"
         },
         {
             "name": "beta/bx.model",

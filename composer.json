@@ -16,7 +16,7 @@
         "psr/http-factory": "^1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
-        "beta/bx.model": "^1.0",
+        "beta/bx.jwt": "^1.0",
         "beta/bitrix-psr7": "^1.0",
         "beta/bitrix-psr17": "^1.0"
     }
