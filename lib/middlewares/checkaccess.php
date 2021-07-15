@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Beta\Api\Middlewares;
+namespace BX\Router\Middlewares;
 
 
 use Bx\Model\Interfaces\UserContextInterface;
