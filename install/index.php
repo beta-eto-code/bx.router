@@ -49,7 +49,7 @@ class bx_router extends CModule
         }
 
         require_once $modulePath;
-        $moduleInstaller = new bx_router();
+        $moduleInstaller = new bx_jwt();
         $resultInstall = (bool)$moduleInstaller->DoInstall();
         if (!$resultInstall) {
             $this->setError('Ошибка установки модуля bx.jwt');
