@@ -76,6 +76,7 @@ class bx_router extends CModule
             return false;
         }
         RouterLogTable::getEntity()->createDbTable();
+        return true;
     }
 
     public function DoUninstall()
