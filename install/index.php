@@ -42,7 +42,7 @@ class bx_router extends CModule
             return true;
         }
 
-        $modulePath = getLocalPath("modules/bx.jwt/install/install.php");
+        $modulePath = getLocalPath("modules/bx.jwt/install/index.php");
         if (!$modulePath) {
             $this->setError('Отсутствует модуль bx.jwt - https://github.com/beta-eto-code/bx.jwt');
             return false;
