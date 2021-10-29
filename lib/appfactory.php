@@ -154,7 +154,7 @@ class AppFactory implements AppFactoryInterface
      * @param string $reasonPhrase
      * @return ResponseInterface
      */
-    public function makeJsonResponse(
+    public function createJsonResponse(
         array $data,
         int $code = 200,
         string $reasonPhrase = ''
