@@ -147,4 +147,25 @@ class AppFactory implements AppFactoryInterface
 
         return $wrapper;
     }
+
+    /**
+     * @param array $data
+     * @param int $code
+     * @param string $reasonPhrase
+     * @return ResponseInterface
+     */
+    public function makeJsonResponse(
+        array $data,
+        int $code = 200,
+        string $reasonPhrase = ''
+    ): ResponseInterface
+    {
+        $response = $this->createResponse($code, $reasonPhrase);
+        $response->getBody()->write(json_encode(
+            $data,
+            JSON_UNESCAPED_UNICODE
+        ));
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }
