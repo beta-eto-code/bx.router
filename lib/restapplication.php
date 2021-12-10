@@ -8,6 +8,7 @@ use BitrixPSR7\ServerRequest;
 use BX\Router\Bitrix\ExtendRouter;
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\BitrixServiceInterface;
+use BX\Router\Interfaces\ContainerInterface;
 use BX\Router\Interfaces\ControllerInterface;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Interfaces\RestAppInterface;
@@ -32,7 +33,7 @@ class RestApplication implements RestAppInterface
     private $router;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
     /**
@@ -52,13 +53,13 @@ class RestApplication implements RestAppInterface
      */
     private $middleware;
 
-    public function __construct()
+    public function __construct(ContainerInterface $container = null)
     {
         $this->app = Application::getInstance();
         $this->bitrixRouter = new ExtendRouter;
         $this->router = new Router($this->app, $this->bitrixRouter);
         $this->responseHandler = new ResponseHandler();
-        $this->container = new Container;
+        $this->container = $container ?? new Container;
         $this->bitrixService = new BitrixService;
         $this->factory = new AppFactory($this->bitrixService, $this->container);
     }
