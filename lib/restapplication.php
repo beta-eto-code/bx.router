@@ -134,12 +134,28 @@ class RestApplication implements RestAppInterface
         return $middleware->process($request, $controller);
     }
 
+    /**
+     * @param string $name
+     * @param $serviceInstance
+     * @return void
+     */
     public function setService(string $name, $serviceInstance)
     {
-        //TODO: replace with ContainerSetterInterface
-        ServiceLocator::getInstance()->addInstance($name, $serviceInstance);
+        $this->container->set($name, $serviceInstance);
     }
 
+    /**
+     * @param string $name
+     * @return void
+     * @throws \Bitrix\Main\ObjectNotFoundException
+     */
+    public function getService(string $name){
+        return $this->container->has($name) ? $this->container->get($name) : null;
+    }
+
+    /**
+     * @return RouterInterface
+     */
     public function getRouter(): RouterInterface
     {
         return $this->router;
