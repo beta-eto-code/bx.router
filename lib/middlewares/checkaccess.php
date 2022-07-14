@@ -1,11 +1,10 @@
 <?php
 
-
 namespace BX\Router\Middlewares;
-
 
 use Bx\Model\Interfaces\UserContextInterface;
 use BX\Router\Exceptions\ForbiddenException;
+use BX\Router\Exceptions\UnauthorizedException;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Middlewares\Traits\ChainHelper;
 use Psr\Http\Message\ResponseInterface;
@@ -31,6 +30,7 @@ class CheckAccess implements MiddlewareChainInterface
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
      * @throws ForbiddenException
+     * @throws UnauthorizedException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -39,7 +39,7 @@ class CheckAccess implements MiddlewareChainInterface
          */
         $userContext = $request->getAttribute('user') ?? null;
         if (empty($userContext)) {
-            throw new ForbiddenException('Пользователь не авторизован');
+            throw new UnauthorizedException('Пользователь не авторизован');
         }
 
         foreach ($this->roleList as $role) {

@@ -1,0 +1,53 @@
+<?php
+
+namespace BX\Router\Middlewares;
+
+use BX\Router\Interfaces\MiddlewareChainInterface;
+use BX\Router\Middlewares\Traits\ChainHelper;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
+class CorsMiddleware implements MiddlewareChainInterface
+{
+    use ChainHelper;
+
+    /**
+     * @var array|string[]
+     */
+    private array $allowOrigin;
+    /**
+     * @var array|string[]
+     */
+    private array $allowMethods;
+    /**
+     * @var array|string[]
+     */
+    private array $allowHeaders;
+
+    public function __construct(?array $allowOrigin = null, ?array $allowMethods = null, ?array $allowHeaders = null)
+    {
+        $this->allowOrigin = $allowOrigin ?? ['*'];
+        $this->allowMethods = $allowMethods ?? ['PUT', 'GET', 'POST', 'DELETE', 'OPTIONS'];
+        $this->allowHeaders = $allowHeaders ?? ['*'];
+    }
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $origin = current($request->getHeader('Referer') ?? ($request->getHeader('Origin') ?? []));
+        if (!empty($origin)) {
+            $origin = trim($origin, '/');
+        }
+
+        if (empty($origin) || !in_array($origin, $this->allowOrigin)) {
+            return $this->runChain($request, $handler);
+        }
+
+        $request = $this->runChain($request, $handler);
+
+        return $request->withHeader('Access-Control-Allow-Origin', $origin)
+            ->withHeader('Access-Control-Allow-Headers', $this->allowHeaders)
+            ->withHeader('Access-Control-Allow-Methods', $this->allowMethods)
+            ->withHeader('Access-Control-Allow-Credentials', 'true');
+    }
+}
