@@ -2,6 +2,7 @@
 
 namespace BX\Router\Middlewares;
 
+use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Middlewares\Traits\ChainHelper;
 use Psr\Http\Message\ResponseInterface;
@@ -12,6 +13,10 @@ class CorsMiddleware implements MiddlewareChainInterface
 {
     use ChainHelper;
 
+    /**
+     * @var AppFactoryInterface
+     */
+    private $factory;
     /**
      * @var array|string[]
      */
@@ -25,8 +30,13 @@ class CorsMiddleware implements MiddlewareChainInterface
      */
     private array $allowHeaders;
 
-    public function __construct(?array $allowOrigin = null, ?array $allowMethods = null, ?array $allowHeaders = null)
-    {
+    public function __construct(
+        AppFactoryInterface $factory,
+        ?array $allowOrigin = null,
+        ?array $allowMethods = null,
+        ?array $allowHeaders = null
+    ) {
+        $this->factory = $factory;
         $this->allowOrigin = $allowOrigin ?? ['*'];
         $this->allowMethods = $allowMethods ?? ['PUT', 'GET', 'POST', 'DELETE', 'OPTIONS'];
         $this->allowHeaders = $allowHeaders ?? ['*'];
@@ -43,7 +53,8 @@ class CorsMiddleware implements MiddlewareChainInterface
             return $this->runChain($request, $handler);
         }
 
-        $request = $this->runChain($request, $handler);
+        $method = $request->getMethod();
+        $request = $method !== 'OPTIONS' ? $this->runChain($request, $handler) : $this->factory->createResponse();
 
         return $request->withHeader('Access-Control-Allow-Origin', $origin)
             ->withHeader('Access-Control-Allow-Headers', $this->allowHeaders)
