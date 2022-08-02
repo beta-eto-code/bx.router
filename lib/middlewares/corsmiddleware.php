@@ -54,7 +54,7 @@ class CorsMiddleware implements MiddlewareChainInterface
         }
 
         $method = $request->getMethod();
-        $request = $method !== 'OPTIONS' ? $this->runChain($request, $handler) : $this->factory->createResponse();
+        $request = $method !== 'OPTIONS' ? $this->runChain($request, $handler) : $this->factory->createResponse(204);
 
         return $request->withHeader('Access-Control-Allow-Origin', $origin)
             ->withHeader('Access-Control-Allow-Headers', $this->allowHeaders)
