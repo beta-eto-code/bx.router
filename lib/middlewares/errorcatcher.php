@@ -31,7 +31,7 @@ class ErrorCatcher implements MiddlewareChainInterface
         } catch (Throwable $e) {
             return $this->factory->createJsonResponse([
                 'error' => true,
-                'message' => $e->getMessage(),
+                'errorMessage' => $e->getMessage(),
             ], 500);
         }
     }
