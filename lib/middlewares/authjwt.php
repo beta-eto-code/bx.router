@@ -3,7 +3,6 @@
 namespace BX\Router\Middlewares;
 
 use Bx\JWT\Interfaces\UserTokenServiceInterface;
-use Bx\JWT\UserTokenService;
 use Bx\Model\Interfaces\AccessStrategyInterface;
 use BX\Router\Exceptions\ForbiddenException;
 use BX\Router\Interfaces\MiddlewareChainInterface;
@@ -22,7 +21,7 @@ class AuthJWT implements MiddlewareChainInterface
      */
     private $headerName;
     /**
-     * @var UserTokenService
+     * @var UserTokenServiceInterface
      */
     private $tokenService;
     /**
@@ -40,8 +39,7 @@ class AuthJWT implements MiddlewareChainInterface
         string $headerName,
         UserTokenServiceInterface $tokenService,
         AccessStrategyInterface $accessStrategy = null
-    )
-    {
+    ) {
         $this->headerName = $headerName;
         $this->tokenService = $tokenService;
         $this->accessStrategy = $accessStrategy;

@@ -1,11 +1,10 @@
 <?php
 
-
 namespace BX\Router\Middlewares;
-
 
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Middlewares\Traits\ChainHelper;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -16,8 +15,8 @@ class Cache implements MiddlewareChainInterface
 {
     use ChainHelper;
 
-    const CACHE_DIR = 'router_cache';
-    const ALLOW_METHOD = 'get';
+    public const CACHE_DIR = 'router_cache';
+    public const ALLOW_METHOD = 'get';
 
     /**
      * @var int
@@ -50,7 +49,7 @@ class Cache implements MiddlewareChainInterface
             'attributes' => $request->getAttributes(),
         ];
 
-        return 'query_'.md5(serialize($data));
+        return 'query_' . md5(serialize($data));
     }
 
     /**
@@ -81,6 +80,10 @@ class Cache implements MiddlewareChainInterface
                 $cache->abortDataCache();
                 throw $e;
             }
+        }
+
+        if (!($response instanceof ResponseInterface)) {
+            throw new Exception('error create response');
         }
 
         return $response;

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router\Middlewares;
-
 
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\HttpExceptionInterface;
@@ -32,7 +30,12 @@ class HttpException implements MiddlewareChainInterface
             return $this->runChain($request, $handler);
         } catch (HttpExceptionInterface $e) {
             $e->setRequest($request);
-            return $e->getResponse($this->appFactory);
+            $response = $e->getResponse($this->appFactory);
+
+            return $response instanceof ResponseInterface ? $response : $this->appFactory->createJsonResponse([
+                'error' => true,
+                'errorMessage' => $e->getMessage()
+            ], 500);
         }
     }
 }

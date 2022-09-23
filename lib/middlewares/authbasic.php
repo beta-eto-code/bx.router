@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router\Middlewares;
-
 
 use Bx\Model\Interfaces\AccessStrategyInterface;
 use Bx\Model\Interfaces\UserContextInterface;
@@ -22,7 +20,7 @@ class AuthBasic implements MiddlewareChainInterface
      */
     private $userService;
     /**
-     * @var AccessStrategyInterface
+     * @var ?AccessStrategyInterface
      */
     private $accessStrategy;
 
@@ -31,7 +29,7 @@ class AuthBasic implements MiddlewareChainInterface
      * @param UserServiceInterface $userService
      * @param AccessStrategyInterface|null $accessStrategy
      */
-    public function __construct(UserServiceInterface $userService, AccessStrategyInterface $accessStrategy = null)
+    public function __construct(UserServiceInterface $userService, ?AccessStrategyInterface $accessStrategy = null)
     {
         $this->userService = $userService;
         $this->accessStrategy = $accessStrategy;
@@ -44,7 +42,7 @@ class AuthBasic implements MiddlewareChainInterface
         $password = (string)$params['PHP_AUTH_PW'];
 
         $userContext = $this->userService->login($user, $password);
-        if ($this->accessStrategy instanceof AccessStrategyInterface) {
+        if ($userContext instanceof UserContextInterface && $this->accessStrategy instanceof AccessStrategyInterface) {
             $userContext->setAccessStrategy($this->accessStrategy);
         }
 
