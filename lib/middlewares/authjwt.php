@@ -5,6 +5,7 @@ namespace BX\Router\Middlewares;
 use Bx\JWT\Interfaces\UserTokenServiceInterface;
 use Bx\Model\Interfaces\AccessStrategyInterface;
 use BX\Router\Exceptions\ForbiddenException;
+use BX\Router\Exceptions\UnauthorizedException;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Middlewares\Traits\ChainHelper;
 use Psr\Http\Message\ResponseInterface;
@@ -49,7 +50,7 @@ class AuthJWT implements MiddlewareChainInterface
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
-     * @throws ForbiddenException
+     * @throws UnauthorizedException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -65,7 +66,7 @@ class AuthJWT implements MiddlewareChainInterface
                 $userContext->setAccessStrategy($this->accessStrategy);
             }
         } catch (UnexpectedValueException $e) {
-            throw new ForbiddenException($e->getMessage());
+            throw new UnauthorizedException($e->getMessage());
         }
         return $this->runChain($request->withAttribute('user', $userContext), $handler);
     }
