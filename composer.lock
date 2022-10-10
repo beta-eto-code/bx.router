@@ -84,16 +84,16 @@
         },
         {
             "name": "beta/bx.jwt",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beta-eto-code/bx.jwt.git",
-                "reference": "1b89a084b50a0e67c808d5a5798f6e027a6fd79d"
+                "reference": "cd77a0d9e6118752c087429983b5974c2fa8b1a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beta-eto-code/bx.jwt/zipball/1b89a084b50a0e67c808d5a5798f6e027a6fd79d",
-                "reference": "1b89a084b50a0e67c808d5a5798f6e027a6fd79d",
+                "url": "https://api.github.com/repos/beta-eto-code/bx.jwt/zipball/cd77a0d9e6118752c087429983b5974c2fa8b1a1",
+                "reference": "cd77a0d9e6118752c087429983b5974c2fa8b1a1",
                 "shasum": ""
             },
             "require": {
@@ -113,9 +113,9 @@
             "description": "JWT tokens for Bitrix app",
             "support": {
                 "issues": "https://github.com/beta-eto-code/bx.jwt/issues",
-                "source": "https://github.com/beta-eto-code/bx.jwt/tree/1.0.0"
+                "source": "https://github.com/beta-eto-code/bx.jwt/tree/1.1.0"
             },
-            "time": "2021-07-14T18:49:26+00:00"
+            "time": "2022-10-10T06:59:44+00:00"
         },
         {
             "name": "beta/bx.model",
@@ -501,5 +501,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
