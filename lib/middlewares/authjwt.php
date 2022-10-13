@@ -4,7 +4,6 @@ namespace BX\Router\Middlewares;
 
 use Bx\JWT\Interfaces\UserTokenServiceInterface;
 use Bx\Model\Interfaces\AccessStrategyInterface;
-use BX\Router\Exceptions\ForbiddenException;
 use BX\Router\Exceptions\UnauthorizedException;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Middlewares\Traits\ChainHelper;
@@ -29,21 +28,28 @@ class AuthJWT implements MiddlewareChainInterface
      * @var AccessStrategyInterface|null
      */
     private $accessStrategy;
+    /**
+     * @var bool
+     */
+    private $handleException;
 
     /**
      * AuthJWT constructor.
      * @param string $headerName
      * @param UserTokenServiceInterface $tokenService
      * @param AccessStrategyInterface|null $accessStrategy
+     * @param bool $handleException
      */
     public function __construct(
         string $headerName,
         UserTokenServiceInterface $tokenService,
-        AccessStrategyInterface $accessStrategy = null
+        AccessStrategyInterface $accessStrategy = null,
+        bool $handleException = true
     ) {
         $this->headerName = $headerName;
         $this->tokenService = $tokenService;
         $this->accessStrategy = $accessStrategy;
+        $this->handleException = $handleException;
     }
 
     /**
@@ -66,6 +72,10 @@ class AuthJWT implements MiddlewareChainInterface
                 $userContext->setAccessStrategy($this->accessStrategy);
             }
         } catch (UnexpectedValueException $e) {
+            if (!$this->handleException) {
+                return $this->runChain($request, $handler);
+            }
+
             throw new UnauthorizedException($e->getMessage());
         }
         return $this->runChain($request->withAttribute('user', $userContext), $handler);
