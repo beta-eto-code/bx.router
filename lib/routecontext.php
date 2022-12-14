@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router;
-
 
 use BX\Router\Bitrix\ExtendRouter;
 use BX\Router\Interfaces\ControllerInterface;
@@ -53,6 +51,25 @@ class RouteContext implements RouteContextInterface
             $this->middleware->addMiddleware(new Cache($ttl, $key));
         } else {
             $this->middleware = new Cache($ttl, $key);
+        }
+
+        $this->router->registerMiddleware($this->controller, $this->middleware);
+        return $this;
+    }
+
+    /**
+     * @param int $ttl
+     * @param callable $fnKeyCalculate
+     * @return $this
+     */
+    public function useCacheWithKeyCallback(int $ttl, callable $fnKeyCalculate): RouteContextInterface
+    {
+        $cacheMiddleware = new Cache($ttl);
+        $cacheMiddleware->setKeyCalculateCallback($fnKeyCalculate);
+        if ($this->middleware instanceof MiddlewareChainInterface) {
+            $this->middleware->addMiddleware($cacheMiddleware);
+        } else {
+            $this->middleware = $cacheMiddleware;
         }
 
         $this->router->registerMiddleware($this->controller, $this->middleware);

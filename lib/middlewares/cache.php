@@ -26,11 +26,32 @@ class Cache implements MiddlewareChainInterface
      * @var string|null
      */
     private $key;
+    /**
+     * @var callable
+     */
+    private $fnKeyCalculate;
 
     public function __construct(int $ttl, string $key = null)
     {
         $this->ttl = $ttl;
         $this->key = $key;
+        $this->fnKeyCalculate = function (ServerRequestInterface $request): string {
+            $data = [
+                'uri' => $request->getRequestTarget(),
+                'query' => $request->getQueryParams(),
+                'attributes' => $request->getAttributes(),
+            ];
+            return 'query_' . md5(serialize($data));
+        };
+    }
+
+    /**
+     * @param callable $fnKeyCalculate
+     * @return void
+     */
+    public function setKeyCalculateCallback(callable $fnKeyCalculate)
+    {
+        $this->fnKeyCalculate = $fnKeyCalculate;
     }
 
     /**
@@ -39,17 +60,7 @@ class Cache implements MiddlewareChainInterface
      */
     private function getCacheKey(ServerRequestInterface $request): string
     {
-        if (!empty($this->key)) {
-            return $this->key;
-        }
-
-        $data = [
-            'uri' => $request->getRequestTarget(),
-            'query' => $request->getQueryParams(),
-            'attributes' => $request->getAttributes(),
-        ];
-
-        return 'query_' . md5(serialize($data));
+        return !empty($this->key) ? $this->key : ($this->fnKeyCalculate)($request);
     }
 
     /**

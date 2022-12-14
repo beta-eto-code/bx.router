@@ -17,4 +17,11 @@ interface RouteContextInterface
      * @return $this
      */
     public function useCache(int $ttl, string $key = null): self;
+
+    /**
+     * @param int $ttl
+     * @param callable $fnKeyCalculate
+     * @return $this
+     */
+    public function useCacheWithKeyCallback(int $ttl, callable $fnKeyCalculate): self;
 }
