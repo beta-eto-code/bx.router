@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BX\Router\Middlewares\Traits;
 
 use BX\Router\Interfaces\MiddlewareChainInterface;

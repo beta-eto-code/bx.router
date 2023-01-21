@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router;
-
 
 use Bitrix\Main\Application;
 use BX\Router\Bitrix\ExtendedRoutingConfigurator;
@@ -33,7 +31,7 @@ class Router implements RouterInterface
     {
         $this->app = $app;
         $this->bitrixRouter = $bitrixRouter;
-        $this->configurator = new ExtendedRoutingConfigurator;
+        $this->configurator = new ExtendedRoutingConfigurator();
         $this->configurator->setRouter($this->bitrixRouter);
     }
 
@@ -60,7 +58,8 @@ class Router implements RouterInterface
             $controller,
             function (ServerRequestInterface $request, ResponseInterface $response) {
                 return $response->withBody(Utils::streamFor(''));
-            });
+            }
+        );
 
         $this->configurator->head($uri, $proxyController);
         return new RouteContext($this->bitrixRouter, $proxyController);

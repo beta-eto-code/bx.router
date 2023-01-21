@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router;
-
 
 use Bitrix\Main\HttpRequest;
 use Bitrix\Main\HttpResponse;
@@ -17,6 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
+
 use const UPLOAD_ERR_OK;
 
 class AppFactory implements AppFactoryInterface
@@ -114,8 +113,7 @@ class AppFactory implements AppFactoryInterface
         int $error = UPLOAD_ERR_OK,
         string $clientFilename = null,
         string $clientMediaType = null
-    ): UploadedFileInterface
-    {
+    ): UploadedFileInterface {
         return $this->httpFactory->createUploadedFile($stream, $size, $error, $clientFilename, $clientMediaType);
     }
 
@@ -138,8 +136,7 @@ class AppFactory implements AppFactoryInterface
         string $componentName,
         string $templateName = '',
         array $params = []
-    ): ComponentWrapperInterface
-    {
+    ): ComponentWrapperInterface {
         $wrapper = new ComponentWrapper($componentName, $templateName, $params);
         $wrapper->setAppFactory($this);
         $wrapper->setContainer($this->containerGetter);
@@ -158,8 +155,7 @@ class AppFactory implements AppFactoryInterface
         array $data,
         int $code = 200,
         string $reasonPhrase = ''
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $response = $this->createResponse($code, $reasonPhrase);
         $response->getBody()->write(json_encode(
             $data,

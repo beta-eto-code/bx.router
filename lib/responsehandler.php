@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router;
-
 
 use BX\Router\Interfaces\ResponseHandlerInterface;
 use CHTTP;
@@ -25,7 +23,7 @@ class ResponseHandler implements ResponseHandlerInterface
 
     public function handle(ResponseInterface $response)
     {
-        CHTTP::SetStatus($response->getStatusCode().' '. $response->getReasonPhrase());
+        CHTTP::SetStatus($response->getStatusCode() . ' ' . $response->getReasonPhrase());
 
         $this->setHeaders($response->getHeaders());
         echo $response->getBody();

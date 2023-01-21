@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router\Bitrix;
-
 
 use Bitrix\Main\Routing\RoutingConfiguration;
 use Bitrix\Main\Routing\RoutingConfigurator;
@@ -32,8 +30,7 @@ class ExtendedRoutingConfigurator extends RoutingConfigurator
     public function __call($method, $arguments)
     {
         // setting extend route
-        if (in_array($method, ExtendedRoutingConfiguration::$configurationList, true))
-        {
+        if (in_array($method, ExtendedRoutingConfiguration::$configurationList, true)) {
             $configuration = $this->createExtendConfiguration();
             return $configuration->$method(...$arguments);
         }
@@ -46,7 +43,7 @@ class ExtendedRoutingConfigurator extends RoutingConfigurator
      */
     public function createExtendConfiguration()
     {
-        $configuration = new ExtendedRoutingConfiguration;
+        $configuration = new ExtendedRoutingConfiguration();
 
         $configuration->setConfigurator($this);
         $this->router->registerConfiguration($configuration);

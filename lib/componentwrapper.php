@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router;
-
 
 use BX\Router\Interfaces\ComponentWrapperInterface;
 use CBitrixComponent;

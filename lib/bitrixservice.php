@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router;
-
 
 use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\Application;
@@ -19,7 +17,6 @@ use CUser;
 
 class BitrixService implements BitrixServiceInterface
 {
-
     /**
      * @var Application|null
      */
@@ -102,8 +99,7 @@ class BitrixService implements BitrixServiceInterface
         string $templateName = '',
         array $params = [],
         bool $returnResult = false
-    )
-    {
+    ) {
         global $APPLICATION;
 
         ob_start();

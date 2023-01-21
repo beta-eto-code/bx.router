@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router\Bitrix;
-
 
 use Bitrix\Main\HttpRequest;
 use Bitrix\Main\Routing\Route;

@@ -7,14 +7,14 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class NotFoundException extends HttpException
 {
-    const PHRASE = 'Not found';
-    const CODE = 404;
+    public const PHRASE = 'Not found';
+    public const CODE = 404;
 
     public function __construct(
         string $message,
         ServerRequestInterface $request = null,
         AppFactoryInterface $appFactory = null
-    ){
+    ) {
         parent::__construct($message, static::CODE, static::PHRASE, $request, $appFactory);
     }
 }

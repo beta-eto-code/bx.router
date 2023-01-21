@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BX\Router\Interfaces;
 
 use Psr\Http\Server\MiddlewareInterface;

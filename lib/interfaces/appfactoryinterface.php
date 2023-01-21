@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router\Interfaces;
-
 
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -29,7 +27,8 @@ interface AppFactoryInterface extends
     public function createComponentWrapper(
         string $componentName,
         string $templateName = '',
-        array $params = []): ComponentWrapperInterface;
+        array $params = []
+    ): ComponentWrapperInterface;
 
     /**
      * @param array $data

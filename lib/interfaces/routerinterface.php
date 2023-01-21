@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BX\Router\Interfaces;
 
 interface RouterInterface

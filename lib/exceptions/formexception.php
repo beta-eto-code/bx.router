@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router\Exceptions;
-
 
 use BX\Router\Interfaces\AppFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -10,8 +8,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class FormException extends HttpException
 {
-    const PHRASE = 'Invalid form data';
-    const CODE = 400;
+    public const PHRASE = 'Invalid form data';
+    public const CODE = 400;
 
     /**
      * @var array
@@ -21,7 +19,7 @@ class FormException extends HttpException
     public function __construct(
         ServerRequestInterface $request = null,
         AppFactoryInterface $appFactory = null
-    ){
+    ) {
         $this->errors = [];
         parent::__construct('', static::CODE, static::PHRASE, $request, $appFactory);
     }

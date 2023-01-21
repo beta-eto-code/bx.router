@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router;
-
 
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\BitrixServiceInterface;
@@ -13,7 +11,6 @@ use SplObjectStorage;
 
 abstract class BaseController implements ControllerInterface
 {
-
     /**
      * @var BitrixServiceInterface
      */

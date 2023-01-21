@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router\Exceptions;
-
 
 use BX\Router\Interfaces\AppFactoryInterface;
 use BX\Router\Interfaces\HttpExceptionInterface;
@@ -31,8 +29,7 @@ class HttpException extends Exception implements HttpExceptionInterface
         string $phrase,
         ServerRequestInterface $request = null,
         AppFactoryInterface $appFactory = null
-    )
-    {
+    ) {
         $this->request = $request;
         $this->phrase = $phrase;
         $this->appFactory = $appFactory;

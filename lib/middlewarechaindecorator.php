@@ -31,8 +31,7 @@ class MiddlewareChainDecorator implements MiddlewareChainInterface
         RequestHandlerInterface $handler,
         MiddlewareInterface $middleware
     ): RequestHandlerInterface {
-        return new class($handler, $middleware)
-            implements RequestHandlerInterface {
+        return new class ($handler, $middleware) implements RequestHandlerInterface {
             private RequestHandlerInterface $handler;
             private MiddlewareInterface $middleware;
 

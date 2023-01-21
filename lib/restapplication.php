@@ -4,6 +4,7 @@ namespace BX\Router;
 
 use Bitrix\Main\Application;
 use Bitrix\Main\DI\ServiceLocator;
+use Bitrix\Main\ObjectNotFoundException;
 use BitrixPSR7\ServerRequest;
 use BX\Router\Bitrix\ExtendRouter;
 use BX\Router\Interfaces\AppFactoryInterface;
@@ -13,6 +14,7 @@ use BX\Router\Interfaces\ControllerInterface;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Interfaces\RestAppInterface;
 use BX\Router\Interfaces\RouterInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Exception;
@@ -56,11 +58,11 @@ class RestApplication implements RestAppInterface
     public function __construct(ContainerInterface $container = null)
     {
         $this->app = Application::getInstance();
-        $this->bitrixRouter = new ExtendRouter;
+        $this->bitrixRouter = new ExtendRouter();
         $this->router = new Router($this->app, $this->bitrixRouter);
         $this->responseHandler = new ResponseHandler();
-        $this->container = $container ?? new Container;
-        $this->bitrixService = new BitrixService;
+        $this->container = $container ?? new Container();
+        $this->bitrixService = new BitrixService();
         $this->factory = new AppFactory($this->bitrixService, $this->container);
     }
 
@@ -95,9 +97,9 @@ class RestApplication implements RestAppInterface
             throw new Exception('Controller must implement BX\Router\Interfaces\ControllerInterface');
         }
 
-        $controller->setBitrixService($this->bitrixService);    // пробрасываем сервисы битрикса в контроллер
-        $controller->setAppFactory($this->factory);             // пробрасываем фабрику psr 17 в контроллер
-        $controller->setContainer($this->container);            // пробрасываем контейнер (di - внешние сервисы) в контроллер
+        $controller->setBitrixService($this->bitrixService); // пробрасываем сервисы битрикса в контроллер
+        $controller->setAppFactory($this->factory); // пробрасываем фабрику psr 17 в контроллер
+        $controller->setContainer($this->container); // пробрасываем контейнер (di - внешние сервисы) в контроллер
 
         $request = new ServerRequest($bitrixRequest);
         foreach ($route->getParametersValues() as $name => $value) {
@@ -114,9 +116,10 @@ class RestApplication implements RestAppInterface
      * @param ControllerInterface $controller
      * @return ResponseInterface|null
      */
-    private function executeController(ServerRequestInterface $request, ControllerInterface $controller): ?ResponseInterface
-    {
-        $middleware = null;
+    private function executeController(
+        ServerRequestInterface $request,
+        ControllerInterface $controller
+    ): ?ResponseInterface {
         if ($this->middleware instanceof MiddlewareChainInterface) {
             $middleware = clone $this->middleware;
             $routerMiddleware = $this->bitrixRouter->getMiddlewaresByController($controller);
@@ -147,9 +150,11 @@ class RestApplication implements RestAppInterface
     /**
      * @param string $name
      * @return void
-     * @throws \Bitrix\Main\ObjectNotFoundException
+     * @throws ObjectNotFoundException
+     * @throws NotFoundExceptionInterface
      */
-    public function getService(string $name){
+    public function getService(string $name)
+    {
         return $this->container->has($name) ? $this->container->get($name) : null;
     }
 

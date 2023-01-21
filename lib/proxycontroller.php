@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router;
-
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;

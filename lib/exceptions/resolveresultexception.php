@@ -1,8 +1,6 @@
 <?php
 
-
 namespace BX\Router\Exceptions;
-
 
 use Bitrix\Main\Result;
 use BX\Router\Interfaces\AppFactoryInterface;
@@ -14,8 +12,7 @@ class ResolveResultException extends HttpException
         Result $result,
         ServerRequestInterface $request = null,
         AppFactoryInterface $appFactory = null
-    )
-    {
+    ) {
         $error = current($result->getErrors());
         if (empty($error)) {
             parent::__construct(
