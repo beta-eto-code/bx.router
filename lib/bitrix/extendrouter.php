@@ -32,8 +32,10 @@ class ExtendRouter extends Router
      * @param MiddlewareChainInterface $middleware
      * @return MiddlewareChainInterface
      */
-    public function registerMiddleware(ControllerInterface $controller, MiddlewareChainInterface $middleware): MiddlewareChainInterface
-    {
+    public function registerMiddleware(
+        ControllerInterface $controller,
+        MiddlewareChainInterface $middleware
+    ): MiddlewareChainInterface {
         return $this->storage[$controller] = $middleware;
     }
 

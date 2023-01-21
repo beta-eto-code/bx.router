@@ -19,5 +19,14 @@
         "beta/bx.jwt": "^1.0",
         "beta/bitrix-psr7": "^1.0",
         "beta/bitrix-psr17": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload-dev": {
+        "classmap": ["lib/"],
+        "psr-4": {
+            "Bx\\Router\\Tests\\": "tests/"
+        }
     }
 }

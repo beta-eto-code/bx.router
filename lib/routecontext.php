@@ -7,6 +7,7 @@ use BX\Router\Interfaces\ControllerInterface;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Interfaces\RouteContextInterface;
 use BX\Router\Middlewares\Cache;
+use Psr\Http\Server\MiddlewareInterface;
 
 class RouteContext implements RouteContextInterface
 {
@@ -19,7 +20,7 @@ class RouteContext implements RouteContextInterface
      */
     private $controller;
     /**
-     * @var MiddlewareChainInterface
+     * @var ?MiddlewareChainInterface
      */
     private $middleware;
 
@@ -30,12 +31,12 @@ class RouteContext implements RouteContextInterface
     }
 
     /**
-     * @param MiddlewareChainInterface $middleware
+     * @param MiddlewareInterface $middleware
      * @return MiddlewareChainInterface
      */
-    public function registerMiddleware(MiddlewareChainInterface $middleware): MiddlewareChainInterface
+    public function registerMiddleware(MiddlewareInterface $middleware): MiddlewareChainInterface
     {
-        $this->middleware = $middleware;
+        $this->middleware = new MiddlewareChainDecorator($middleware);
         return $this->router->registerMiddleware($this->controller, $this->middleware);
     }
 
@@ -69,7 +70,7 @@ class RouteContext implements RouteContextInterface
         if ($this->middleware instanceof MiddlewareChainInterface) {
             $this->middleware->addMiddleware($cacheMiddleware);
         } else {
-            $this->middleware = $cacheMiddleware;
+            $this->middleware = new MiddlewareChainDecorator($cacheMiddleware);
         }
 
         $this->router->registerMiddleware($this->controller, $this->middleware);
