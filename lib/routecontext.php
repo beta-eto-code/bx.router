@@ -13,6 +13,7 @@ class RouteContext implements RouteContextInterface
 {
     /**
      * @var ExtendRouter
+     * @psalm-suppress MissingDependency
      */
     private $router;
     /**
@@ -24,6 +25,11 @@ class RouteContext implements RouteContextInterface
      */
     private $middleware;
 
+    /**
+     * @param ExtendRouter $router
+     * @param ControllerInterface $controller
+     * @psalm-suppress MissingDependency
+     */
     public function __construct(ExtendRouter $router, ControllerInterface $controller)
     {
         $this->router = $router;
@@ -37,6 +43,9 @@ class RouteContext implements RouteContextInterface
     public function registerMiddleware(MiddlewareInterface $middleware): MiddlewareChainInterface
     {
         $this->middleware = new MiddlewareChainDecorator($middleware);
+        /**
+         * @psalm-suppress MissingDependency
+         */
         return $this->router->registerMiddleware($this->controller, $this->middleware);
     }
 
@@ -45,6 +54,7 @@ class RouteContext implements RouteContextInterface
      * @param int $ttl
      * @param string|null $key
      * @return RouteContextInterface
+     * @psalm-suppress LessSpecificImplementedReturnType
      */
     public function useCache(int $ttl, string $key = null): RouteContextInterface
     {
@@ -54,6 +64,9 @@ class RouteContext implements RouteContextInterface
             $this->middleware = new Cache($ttl, $key);
         }
 
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->router->registerMiddleware($this->controller, $this->middleware);
         return $this;
     }
@@ -73,6 +86,9 @@ class RouteContext implements RouteContextInterface
             $this->middleware = new MiddlewareChainDecorator($cacheMiddleware);
         }
 
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->router->registerMiddleware($this->controller, $this->middleware);
         return $this;
     }

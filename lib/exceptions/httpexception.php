@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class HttpException extends Exception implements HttpExceptionInterface
 {
     /**
-     * @var ServerRequestInterface
+     * @var ServerRequestInterface|null
      */
     protected $request;
     /**
@@ -19,7 +19,7 @@ class HttpException extends Exception implements HttpExceptionInterface
      */
     protected $phrase;
     /**
-     * @var AppFactoryInterface
+     * @var AppFactoryInterface|null
      */
     protected $appFactory;
 
@@ -36,7 +36,7 @@ class HttpException extends Exception implements HttpExceptionInterface
         parent::__construct($message, $code);
     }
 
-    public function getRequest(): ServerRequestInterface
+    public function getRequest(): ?ServerRequestInterface
     {
         return $this->request;
     }
@@ -48,6 +48,9 @@ class HttpException extends Exception implements HttpExceptionInterface
             return null;
         }
 
+        /**
+         * @psalm-suppress RedundantCast
+         */
         $response = $appFactory->createResponse((int)$this->getCode(), $this->phrase);
         $response->getBody()->write(json_encode([
             'error' => true,

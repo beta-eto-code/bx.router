@@ -20,12 +20,11 @@ class AuthBasic implements MiddlewareChainInterface
      */
     private $userService;
     /**
-     * @var ?AccessStrategyInterface
+     * @var AccessStrategyInterface|null
      */
     private $accessStrategy;
 
     /**
-     * AuthBasic constructor.
      * @param UserServiceInterface $userService
      * @param AccessStrategyInterface|null $accessStrategy
      */

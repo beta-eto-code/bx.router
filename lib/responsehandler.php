@@ -8,6 +8,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class ResponseHandler implements ResponseHandlerInterface
 {
+    /**
+     * @param array $headers
+     * @return void
+     */
     private function setHeaders(array $headers)
     {
         foreach ($headers as $key => $value) {

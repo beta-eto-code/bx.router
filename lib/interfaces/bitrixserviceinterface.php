@@ -16,6 +16,7 @@ interface BitrixServiceInterface
 
     /**
      * @return CUser
+     * @psalm-suppress UndefinedDocblockClass
      */
     public function getCUser();
 
@@ -38,6 +39,7 @@ interface BitrixServiceInterface
     /**
      * @param string $className
      * @return DataManager
+     * @psalm-suppress MismatchingDocblockReturnType
      */
     public function getTableByClass(string $className): string;
 

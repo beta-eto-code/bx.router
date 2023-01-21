@@ -13,14 +13,17 @@ abstract class BaseController implements ControllerInterface
 {
     /**
      * @var BitrixServiceInterface
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     protected $bitrixService;
     /**
      * @var AppFactoryInterface
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     protected $appFactory;
     /**
      * @var ContainerGetterInterface
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     protected $container;
 
@@ -64,9 +67,15 @@ abstract class BaseController implements ControllerInterface
         $this->postData = new SplObjectStorage();
         $data = json_decode($request->getBody()->getContents(), true);
         if ($data !== null) {
+            /**
+             * @psalm-suppress InvalidArgument
+             */
             return $this->postData[$request] = $data;
         }
 
+        /**
+         * @psalm-suppress InvalidArgument,InvalidReturnStatement
+         */
         return $this->postData[$request] = $request->getParsedBody() ?? [];
     }
 }

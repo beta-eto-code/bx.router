@@ -12,7 +12,7 @@ use SplObjectStorage;
 trait ChainHelper
 {
     /**
-     * @var SplObjectStorage
+     * @var SplObjectStorage|null
      */
     protected $store;
 
@@ -26,6 +26,9 @@ trait ChainHelper
             $this->store = new SplObjectStorage();  // для избежания циклических зависимостей
         }
 
+        /**
+         * @psalm-suppress InvalidArgument
+         */
         if ($this->store->contains($middleware)) {
             return $this;
         }
@@ -33,9 +36,15 @@ trait ChainHelper
         $this->store->rewind();
         $internal = $this->store->current();
         if ($internal instanceof MiddlewareInterface) {
+            /**
+             * @psalm-suppress UndefinedInterfaceMethod
+             */
             return $internal->addMiddleware($middleware);
         }
 
+        /**
+         * @psalm-suppress InvalidArgument
+         */
         $this->store->attach($middleware);
 
         return $this;
@@ -43,6 +52,7 @@ trait ChainHelper
 
     /**
      * @return MiddlewareInterface|null
+     * @psalm-suppress LessSpecificImplementedReturnType,MoreSpecificReturnType
      */
     public function getMiddleware(): ?MiddlewareInterface
     {

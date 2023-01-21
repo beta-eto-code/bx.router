@@ -54,6 +54,10 @@ class MiddlewareChainDecorator implements MiddlewareChainInterface
         return $this->nextMiddleware;
     }
 
+    /**
+     * @return MiddlewareInterface|null
+     * @psalm-suppress MoreSpecificReturnType,LessSpecificImplementedReturnType
+     */
     public function getMiddleware(): ?MiddlewareInterface
     {
         return $this->nextMiddleware;

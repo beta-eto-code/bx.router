@@ -11,11 +11,17 @@ use Bitrix\Main\Type\DateTime;
 
 class RouterLogTable extends DataManager
 {
+    /**
+     * @return string
+     */
     public static function getTableName()
     {
         return 'router_log';
     }
 
+    /**
+     * @return array
+     */
     public static function getMap()
     {
         return [

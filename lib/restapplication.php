@@ -23,10 +23,11 @@ class RestApplication implements RestAppInterface
 {
     /**
      * @var ExtendRouter
+     * @psalm-suppress MissingDependency
      */
     private $bitrixRouter;
     /**
-     * @var Application|null
+     * @var Application
      */
     private $app;
     /**
@@ -51,16 +52,25 @@ class RestApplication implements RestAppInterface
      */
     private $responseHandler;
     /**
-     * @var MiddlewareChainInterface
+     * @var MiddlewareChainInterface|null
      */
     private $middleware;
 
     public function __construct(ContainerInterface $container = null)
     {
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->app = Application::getInstance();
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->bitrixRouter = new ExtendRouter();
         $this->router = new Router($this->app, $this->bitrixRouter);
         $this->responseHandler = new ResponseHandler();
+        /**
+         * @psalm-suppress PossiblyInvalidPropertyAssignmentValue
+         */
         $this->container = $container ?? new Container();
         $this->bitrixService = new BitrixService();
         $this->factory = new AppFactory($this->bitrixService, $this->container);
@@ -77,13 +87,21 @@ class RestApplication implements RestAppInterface
     }
 
     /**
+     * @return void
      * @throws Exception
+     * @psalm-suppress MissingDependency
      */
     public function run()
     {
-        $this->bitrixRouter->releaseRoutes(); // регистрируем внутренние роуты
+        $this->initRoutes();
         $bitrixRequest = $this->app->getContext()->getRequest();
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $route = $this->bitrixRouter->match($this->app->getContext()->getRequest());
+        if (empty($route)) {
+            return;
+        }
 
         /**
          * @var ControllerInterface|null $controller
@@ -107,14 +125,30 @@ class RestApplication implements RestAppInterface
         }
 
         $response = $this->executeController($request, $controller);
+        if (empty($response)) {
+            return;
+        }
+
         $this->responseHandler->handle($response);
         $this->bitrixService->getBxApplication()->terminate();
+    }
+
+    /**
+     * @return void
+     */
+    private function initRoutes()
+    {
+        /**
+         * @psalm-suppress MissingDependency,UndefinedMethod
+         */
+        $this->bitrixRouter->releaseRoutes(); // регистрируем внутренние роуты
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ControllerInterface $controller
      * @return ResponseInterface|null
+     * @psalm-suppress LessSpecificReturnType
      */
     private function executeController(
         ServerRequestInterface $request,
@@ -122,11 +156,17 @@ class RestApplication implements RestAppInterface
     ): ?ResponseInterface {
         if ($this->middleware instanceof MiddlewareChainInterface) {
             $middleware = clone $this->middleware;
+            /**
+             * @psalm-suppress MissingDependency
+             */
             $routerMiddleware = $this->bitrixRouter->getMiddlewaresByController($controller);
             if ($routerMiddleware instanceof MiddlewareChainInterface) {
                 $middleware->addMiddleware($routerMiddleware);
             }
         } else {
+            /**
+             * @psalm-suppress MissingDependency
+             */
             $middleware = $this->bitrixRouter->getMiddlewaresByController($controller);
         }
 
@@ -139,7 +179,7 @@ class RestApplication implements RestAppInterface
 
     /**
      * @param string $name
-     * @param $serviceInstance
+     * @param mixed $serviceInstance
      * @return void
      */
     public function setService(string $name, $serviceInstance)
@@ -149,7 +189,7 @@ class RestApplication implements RestAppInterface
 
     /**
      * @param string $name
-     * @return void
+     * @return mixed
      * @throws ObjectNotFoundException
      * @throws NotFoundExceptionInterface
      */

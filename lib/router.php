@@ -20,18 +20,28 @@ class Router implements RouterInterface
     private $app;
     /**
      * @var ExtendRouter
+     * @psalm-suppress MissingDependency
      */
     private $bitrixRouter;
     /**
      * @var ExtendedRoutingConfigurator
+     * @psalm-suppress MissingDependency
      */
     private $configurator;
 
+    /**
+     * @param Application $app
+     * @param ExtendRouter $bitrixRouter
+     * @psalm-suppress MissingDependency
+     */
     public function __construct(Application $app, ExtendRouter $bitrixRouter)
     {
         $this->app = $app;
         $this->bitrixRouter = $bitrixRouter;
         $this->configurator = new ExtendedRoutingConfigurator();
+        /**
+         * @psalm-suppress UndefinedMagicMethod
+         */
         $this->configurator->setRouter($this->bitrixRouter);
     }
 
@@ -43,6 +53,9 @@ class Router implements RouterInterface
     public function get(string $uri, ControllerInterface $controller): RouteContextInterface
     {
         $this->head($uri, $controller);
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->configurator->get($uri, $controller);
         return new RouteContext($this->bitrixRouter, $controller);
     }
@@ -61,6 +74,9 @@ class Router implements RouterInterface
             }
         );
 
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->configurator->head($uri, $proxyController);
         return new RouteContext($this->bitrixRouter, $proxyController);
     }
@@ -72,6 +88,9 @@ class Router implements RouterInterface
      */
     public function post(string $uri, ControllerInterface $controller): RouteContextInterface
     {
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->configurator->post($uri, $controller);
         return new RouteContext($this->bitrixRouter, $controller);
     }
@@ -83,6 +102,9 @@ class Router implements RouterInterface
      */
     public function put(string $uri, ControllerInterface $controller): RouteContextInterface
     {
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->configurator->put($uri, $controller);
         return new RouteContext($this->bitrixRouter, $controller);
     }
@@ -94,6 +116,9 @@ class Router implements RouterInterface
      */
     public function delete(string $uri, ControllerInterface $controller): RouteContextInterface
     {
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->configurator->delete($uri, $controller);
         return new RouteContext($this->bitrixRouter, $controller);
     }
@@ -104,6 +129,9 @@ class Router implements RouterInterface
      */
     public function default(ControllerInterface $controller): RouteContextInterface
     {
+        /**
+         * @psalm-suppress MissingDependency
+         */
         $this->bitrixRouter->setDefaultController($controller);
         return new RouteContext($this->bitrixRouter, $controller);
     }

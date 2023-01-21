@@ -9,6 +9,9 @@ use BX\Router\Interfaces\ControllerInterface;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use SplObjectStorage;
 
+/**
+ * @psalm-suppress MissingDependency
+ */
 class ExtendRouter extends Router
 {
     /**

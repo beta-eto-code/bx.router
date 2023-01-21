@@ -22,18 +22,18 @@ class BitrixService implements BitrixServiceInterface
      */
     private $app;
     /**
-     * @var CUser
+     * @var CUser|null
      */
     private $cUser;
     /**
-     * @var UserTable
+     * @var UserTable|null
      */
     private $userTable;
 
     /**
      * @var array
      */
-    private $hlList;
+    private $hlList = [];
 
     public function getBxApplication()
     {
@@ -47,6 +47,7 @@ class BitrixService implements BitrixServiceInterface
     /**
      * @param string $className
      * @return DataManager
+     * @psalm-suppress MismatchingDocblockReturnType,InvalidReturnType,InvalidReturnStatement
      */
     public function getTableByClass(string $className): string
     {
@@ -82,6 +83,12 @@ class BitrixService implements BitrixServiceInterface
         Loader::includeModule($moduleName);
     }
 
+    /**
+     * @param string $type
+     * @param string $code
+     * @return mixed|void
+     * @psalm-suppress InvalidReturnType
+     */
     public function getIblockElementManager(string $type, string $code)
     {
         // TODO: Implement getIblockElementManager() method.

@@ -6,7 +6,7 @@ interface ContainerSetterInterface
 {
     /**
      * @param string $name
-     * @param $serviceInstance
+     * @param mixed $serviceInstance
      * @return void
      */
     public function set(string $name, $serviceInstance);

@@ -22,6 +22,7 @@ class AuthJWT implements MiddlewareChainInterface
     private $headerName;
     /**
      * @var UserTokenServiceInterface
+     * @psalm-suppress UndefinedDocblockClass
      */
     private $tokenService;
     /**
@@ -39,6 +40,7 @@ class AuthJWT implements MiddlewareChainInterface
      * @param UserTokenServiceInterface $tokenService
      * @param AccessStrategyInterface|null $accessStrategy
      * @param bool $handleException
+     * @psalm-suppress UndefinedClass
      */
     public function __construct(
         string $headerName,
@@ -67,6 +69,9 @@ class AuthJWT implements MiddlewareChainInterface
 
         $token = str_replace('Bearer ', '', $header);
         try {
+            /**
+             * @psalm-suppress UndefinedDocblockClass
+             */
             $userContext = $this->tokenService->getUserContext($token);
             if ($this->accessStrategy instanceof AccessStrategyInterface) {
                 $userContext->setAccessStrategy($this->accessStrategy);

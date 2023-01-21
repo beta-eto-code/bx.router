@@ -42,6 +42,9 @@ class FormException extends HttpException
             return null;
         }
 
+        /**
+         * @psalm-suppress RedundantCast
+         */
         $response = $appFactory->createResponse((int)$this->getCode(), $this->phrase);
         $response->getBody()->write(json_encode([
             'error' => true,

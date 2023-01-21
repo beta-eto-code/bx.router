@@ -24,6 +24,9 @@ class Logger implements MiddlewareChainInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $this->runChain($request, $handler);
+        /**
+         * @psalm-suppress MissingDependency,UndefinedMethod,UndefinedInterfaceMethod
+         */
         RouterLogTable::add([
             'url' => $request->getRequestTarget(),
             'method' => $request->getMethod(),

@@ -14,7 +14,7 @@ interface RestAppInterface
     /**
      * Добавляем сервис в DI контейнер
      * @param string $name
-     * @param $serviceInstance
+     * @param mixed $serviceInstance
      * @return void
      */
     public function setService(string $name, $serviceInstance);

@@ -44,6 +44,9 @@ class CorsMiddleware implements MiddlewareChainInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        /**
+         * @psalm-suppress DocblockTypeContradiction,RedundantConditionGivenDocblockType
+         */
         $origin = current($request->getHeader('Referer') ?? ($request->getHeader('Origin') ?? []));
         if (!empty($origin)) {
             $origin = trim($origin, '/');
