@@ -3,7 +3,6 @@
 namespace BX\Router;
 
 use Bitrix\Main\Application;
-use Bitrix\Main\DI\ServiceLocator;
 use Bitrix\Main\ObjectNotFoundException;
 use BitrixPSR7\ServerRequest;
 use BX\Router\Bitrix\ExtendRouter;
@@ -22,45 +21,19 @@ use Exception;
 class RestApplication implements RestAppInterface
 {
     /**
-     * @var ExtendRouter
      * @psalm-suppress MissingDependency
      */
-    private $bitrixRouter;
-    /**
-     * @var Application
-     */
-    private $app;
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-    /**
-     * @var BitrixServiceInterface
-     */
-    private $bitrixService;
-    /**
-     * @var AppFactory
-     */
-    private $factory;
-    /**
-     * @var ResponseHandler
-     */
-    private $responseHandler;
-    /**
-     * @var MiddlewareChainInterface|null
-     */
-    private $middleware;
+    private ExtendRouter $bitrixRouter;
+    private Application $app;
+    private Router $router;
+    private ContainerInterface $container;
+    private BitrixServiceInterface $bitrixService;
+    private AppFactory $factory;
+    private ResponseHandler $responseHandler;
+    private ?MiddlewareChainInterface $middleware = null;
 
     public function __construct(ContainerInterface $container = null)
     {
-        /**
-         * @psalm-suppress MissingDependency
-         */
         $this->app = Application::getInstance();
         /**
          * @psalm-suppress MissingDependency
@@ -87,18 +60,17 @@ class RestApplication implements RestAppInterface
     }
 
     /**
-     * @return void
      * @throws Exception
      * @psalm-suppress MissingDependency
      */
-    public function run()
+    public function run(): void
     {
         $this->initRoutes();
         $bitrixRequest = $this->app->getContext()->getRequest();
         /**
          * @psalm-suppress MissingDependency
          */
-        $route = $this->bitrixRouter->match($this->app->getContext()->getRequest());
+        $route = $this->bitrixRouter->match($bitrixRequest);
         if (empty($route)) {
             return;
         }
@@ -133,10 +105,7 @@ class RestApplication implements RestAppInterface
         $this->bitrixService->getBxApplication()->terminate();
     }
 
-    /**
-     * @return void
-     */
-    private function initRoutes()
+    private function initRoutes(): void
     {
         /**
          * @psalm-suppress MissingDependency,UndefinedMethod
@@ -145,9 +114,6 @@ class RestApplication implements RestAppInterface
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param ControllerInterface $controller
-     * @return ResponseInterface|null
      * @psalm-suppress LessSpecificReturnType
      */
     private function executeController(
@@ -178,17 +144,14 @@ class RestApplication implements RestAppInterface
     }
 
     /**
-     * @param string $name
      * @param mixed $serviceInstance
-     * @return void
      */
-    public function setService(string $name, $serviceInstance)
+    public function setService(string $name, $serviceInstance): void
     {
         $this->container->set($name, $serviceInstance);
     }
 
     /**
-     * @param string $name
      * @return mixed
      * @throws ObjectNotFoundException
      * @throws NotFoundExceptionInterface
@@ -198,27 +161,16 @@ class RestApplication implements RestAppInterface
         return $this->container->has($name) ? $this->container->get($name) : null;
     }
 
-    /**
-     * @return RouterInterface
-     */
     public function getRouter(): RouterInterface
     {
         return $this->router;
     }
 
-    /**
-     * @param ResponseHandler $responseHandler
-     * @return void
-     */
-    public function setResponseHandler(ResponseHandler $responseHandler)
+    public function setResponseHandler(ResponseHandler $responseHandler): void
     {
         $this->responseHandler = $responseHandler;
     }
 
-    /**
-     * @param MiddlewareChainInterface $middleware
-     * @return MiddlewareChainInterface
-     */
     public function registerMiddleware(MiddlewareChainInterface $middleware): MiddlewareChainInterface
     {
         return $this->middleware = $middleware;

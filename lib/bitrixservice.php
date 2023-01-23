@@ -17,25 +17,12 @@ use CUser;
 
 class BitrixService implements BitrixServiceInterface
 {
-    /**
-     * @var Application|null
-     */
-    private $app;
-    /**
-     * @var CUser|null
-     */
-    private $cUser;
-    /**
-     * @var UserTable|null
-     */
-    private $userTable;
+    private ?Application $app = null;
+    private ?CUser $cUser = null;
+    private ?UserTable $userTable = null;
+    private array $hlList = [];
 
-    /**
-     * @var array
-     */
-    private $hlList = [];
-
-    public function getBxApplication()
+    public function getBxApplication(): Application
     {
         if ($this->app instanceof Application) {
             return $this->app;
@@ -54,10 +41,7 @@ class BitrixService implements BitrixServiceInterface
         return $className;
     }
 
-    /**
-     * @return CUser
-     */
-    public function getCUser()
+    public function getCUser(): CUser
     {
         if ($this->cUser instanceof CUser) {
             return $this->cUser;
@@ -66,10 +50,7 @@ class BitrixService implements BitrixServiceInterface
         return $this->cUser = new CUser();
     }
 
-    /**
-     * @return UserTable
-     */
-    public function getUserTable()
+    public function getUserTable(): UserTable
     {
         if ($this->userTable instanceof UserTable) {
             return  $this->userTable;
@@ -78,7 +59,7 @@ class BitrixService implements BitrixServiceInterface
         return $this->userTable = new UserTable();
     }
 
-    public function includeModule(string $moduleName)
+    public function includeModule(string $moduleName): void
     {
         Loader::includeModule($moduleName);
     }

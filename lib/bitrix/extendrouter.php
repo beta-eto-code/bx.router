@@ -14,14 +14,8 @@ use SplObjectStorage;
  */
 class ExtendRouter extends Router
 {
-    /**
-     * @var SplObjectStorage
-     */
-    private $storage;
-    /**
-     * @var ControllerInterface|null
-     */
-    private $defaultController;
+    private SplObjectStorage $storage;
+    private ?ControllerInterface $defaultController = null;
 
     public function __construct()
     {

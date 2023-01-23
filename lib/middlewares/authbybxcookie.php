@@ -17,31 +17,15 @@ class AuthByBxCookie implements MiddlewareChainInterface
 {
     use ChainHelper;
 
-    /**
-     * @var UserServiceInterface
-     */
     private UserServiceInterface $userService;
-    /**
-     * @var AccessStrategyInterface|null
-     */
     private ?AccessStrategyInterface $accessStrategy;
 
-    /**
-     * AuthBasic constructor.
-     * @param UserServiceInterface $userService
-     * @param AccessStrategyInterface|null $accessStrategy
-     */
     public function __construct(UserServiceInterface $userService, AccessStrategyInterface $accessStrategy = null)
     {
         $this->userService = $userService;
         $this->accessStrategy = $accessStrategy;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
-     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $userId = (int) CurrentUser::get()->getId();

@@ -7,11 +7,19 @@ use Bitrix\Main\Routing\RoutingConfiguration;
 
 class ExtendedRoutingConfiguration extends RoutingConfiguration
 {
+    /**
+     * @var string[]
+     */
     public static $configurationList = [
         'get', 'post', 'put', 'delete', 'head', 'any', 'group'
     ];
 
-    public function head($uri, $controller)
+    /**
+     * @param string $uri
+     * @param callable $controller
+     * @return ExtendedRoutingConfiguration
+     */
+    public function head($uri, $controller): ExtendedRoutingConfiguration
     {
         $this->options->methods(['HEAD']);
 
@@ -21,7 +29,12 @@ class ExtendedRoutingConfiguration extends RoutingConfiguration
         return $this;
     }
 
-    public function put($uri, $controller)
+    /**
+     * @param string $uri
+     * @param callable $controller
+     * @return ExtendedRoutingConfiguration
+     */
+    public function put($uri, $controller): ExtendedRoutingConfiguration
     {
         $this->options->methods(['PUT']);
 
@@ -31,7 +44,12 @@ class ExtendedRoutingConfiguration extends RoutingConfiguration
         return $this;
     }
 
-    public function delete($uri, $controller)
+    /**
+     * @param string $uri
+     * @param callable $controller
+     * @return ExtendedRoutingConfiguration
+     */
+    public function delete($uri, $controller): ExtendedRoutingConfiguration
     {
         $this->options->methods(['DELETE']);
 

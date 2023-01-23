@@ -97,7 +97,10 @@ class MiddlewareChainDecoratorTest extends TestCase
         return function (
             ServerRequestInterface $request,
             RequestHandlerInterface $handler
-        ) use ($name, $value): ResponseInterface {
+        ) use (
+            $name,
+            $value
+        ): ResponseInterface {
             $request = $request->withAttribute($name, $value);
             return $handler->handle($request);
         };
@@ -114,7 +117,8 @@ class MiddlewareChainDecoratorTest extends TestCase
             function (string $name, $value) use (&$attributes, $requestStub) {
                 $attributes[$name] = $value;
                 return $requestStub;
-        });
+            }
+        );
 
         return $requestStub;
     }

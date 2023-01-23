@@ -14,9 +14,6 @@ class ErrorCatcher implements MiddlewareChainInterface
 {
     use ChainHelper;
 
-    /**
-     * @var AppFactoryInterface
-     */
     private AppFactoryInterface $factory;
 
     public function __construct(AppFactoryInterface $factory)

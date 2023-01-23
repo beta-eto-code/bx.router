@@ -11,15 +11,8 @@ use SplObjectStorage;
 
 trait ChainHelper
 {
-    /**
-     * @var SplObjectStorage|null
-     */
-    protected $store;
+    protected ?SplObjectStorage $store = null;
 
-    /**
-     * @param MiddlewareInterface $middleware
-     * @return MiddlewareChainInterface
-     */
     public function addMiddleware(MiddlewareInterface $middleware): MiddlewareChainInterface
     {
         if (empty($this->store)) {

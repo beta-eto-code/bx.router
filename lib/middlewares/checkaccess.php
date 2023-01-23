@@ -18,7 +18,7 @@ class CheckAccess implements MiddlewareChainInterface
     /**
      * @var int[]
      */
-    private $roleList;
+    private array $roleList;
 
     public function __construct(int ...$roleList)
     {
@@ -26,9 +26,6 @@ class CheckAccess implements MiddlewareChainInterface
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
      * @throws ForbiddenException
      * @throws UnauthorizedException
      */

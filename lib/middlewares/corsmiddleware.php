@@ -13,20 +13,17 @@ class CorsMiddleware implements MiddlewareChainInterface
 {
     use ChainHelper;
 
+    private AppFactoryInterface $factory;
     /**
-     * @var AppFactoryInterface
-     */
-    private $factory;
-    /**
-     * @var array|string[]
+     * @var string[]
      */
     private array $allowOrigin;
     /**
-     * @var array|string[]
+     * @var string[]
      */
     private array $allowMethods;
     /**
-     * @var array|string[]
+     * @var string[]
      */
     private array $allowHeaders;
 
@@ -57,7 +54,8 @@ class CorsMiddleware implements MiddlewareChainInterface
         }
 
         $method = $request->getMethod();
-        $request = $method !== 'OPTIONS' ? $this->runChain($request, $handler) : $this->factory->createResponse(204);
+        $request = $method !== 'OPTIONS' ? $this->runChain($request, $handler) :
+            $this->factory->createResponse(204);
 
         return $request->withHeader('Access-Control-Allow-Origin', $origin)
             ->withHeader('Access-Control-Allow-Headers', $this->allowHeaders)

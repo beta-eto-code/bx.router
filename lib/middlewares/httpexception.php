@@ -14,10 +14,7 @@ class HttpException implements MiddlewareChainInterface
 {
     use ChainHelper;
 
-    /**
-     * @var AppFactoryInterface
-     */
-    private $appFactory;
+    private AppFactoryInterface $appFactory;
 
     public function __construct(AppFactoryInterface $appFactory)
     {

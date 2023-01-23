@@ -11,10 +11,7 @@ use Throwable;
 
 class Container implements ContainerSetterInterface, ContainerGetterInterface
 {
-    /**
-     * @var ServiceLocator
-     */
-    private $container;
+    private ServiceLocator $container;
 
     public function __construct()
     {

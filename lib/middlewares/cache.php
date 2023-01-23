@@ -18,14 +18,8 @@ class Cache implements MiddlewareChainInterface
     public const CACHE_DIR = 'router_cache';
     public const ALLOW_METHOD = 'get';
 
-    /**
-     * @var int
-     */
-    private $ttl;
-    /**
-     * @var string|null
-     */
-    private $key;
+    private int $ttl;
+    private ?string $key;
     /**
      * @var callable
      */

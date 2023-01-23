@@ -16,30 +16,15 @@ class AuthJWT implements MiddlewareChainInterface
 {
     use ChainHelper;
 
+    private string $headerName;
     /**
-     * @var string
-     */
-    private $headerName;
-    /**
-     * @var UserTokenServiceInterface
      * @psalm-suppress UndefinedDocblockClass
      */
-    private $tokenService;
-    /**
-     * @var AccessStrategyInterface|null
-     */
-    private $accessStrategy;
-    /**
-     * @var bool
-     */
-    private $handleException;
+    private UserTokenServiceInterface $tokenService;
+    private ?AccessStrategyInterface $accessStrategy;
+    private bool $handleException;
 
     /**
-     * AuthJWT constructor.
-     * @param string $headerName
-     * @param UserTokenServiceInterface $tokenService
-     * @param AccessStrategyInterface|null $accessStrategy
-     * @param bool $handleException
      * @psalm-suppress UndefinedClass
      */
     public function __construct(

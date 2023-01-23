@@ -2,7 +2,6 @@
 
 namespace BX\Router;
 
-use Bitrix\Main\HttpRequest;
 use Bitrix\Main\HttpResponse;
 use BitrixPSR17\HttpFactory;
 use BX\Router\Interfaces\AppFactoryInterface;

@@ -12,22 +12,13 @@ use Psr\Http\Server\MiddlewareInterface;
 class RouteContext implements RouteContextInterface
 {
     /**
-     * @var ExtendRouter
      * @psalm-suppress MissingDependency
      */
-    private $router;
-    /**
-     * @var ControllerInterface
-     */
-    private $controller;
-    /**
-     * @var ?MiddlewareChainInterface
-     */
-    private $middleware;
+    private ExtendRouter $router;
+    private ControllerInterface $controller;
+    private ?MiddlewareChainInterface $middleware = null;
 
     /**
-     * @param ExtendRouter $router
-     * @param ControllerInterface $controller
      * @psalm-suppress MissingDependency
      */
     public function __construct(ExtendRouter $router, ControllerInterface $controller)
@@ -36,10 +27,6 @@ class RouteContext implements RouteContextInterface
         $this->controller = $controller;
     }
 
-    /**
-     * @param MiddlewareInterface $middleware
-     * @return MiddlewareChainInterface
-     */
     public function registerMiddleware(MiddlewareInterface $middleware): MiddlewareChainInterface
     {
         $this->middleware = new MiddlewareChainDecorator($middleware);
@@ -51,9 +38,6 @@ class RouteContext implements RouteContextInterface
 
     /**
      * Кешируем ответ сервера
-     * @param int $ttl
-     * @param string|null $key
-     * @return RouteContextInterface
      * @psalm-suppress LessSpecificImplementedReturnType
      */
     public function useCache(int $ttl, string $key = null): RouteContextInterface
@@ -71,11 +55,6 @@ class RouteContext implements RouteContextInterface
         return $this;
     }
 
-    /**
-     * @param int $ttl
-     * @param callable $fnKeyCalculate
-     * @return $this
-     */
     public function useCacheWithKeyCallback(int $ttl, callable $fnKeyCalculate): RouteContextInterface
     {
         $cacheMiddleware = new Cache($ttl);

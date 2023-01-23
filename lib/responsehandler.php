@@ -8,11 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class ResponseHandler implements ResponseHandlerInterface
 {
-    /**
-     * @param array $headers
-     * @return void
-     */
-    private function setHeaders(array $headers)
+    private function setHeaders(array $headers): void
     {
         foreach ($headers as $key => $value) {
             $value = trim(is_array($value) ? implode(',', $value) : $value);
@@ -20,12 +16,12 @@ class ResponseHandler implements ResponseHandlerInterface
             if (strtolower($key) === 'status') {
                 CHTTP::SetStatus($value);
             } else {
-                header("{$key}: {$value}");
+                header("$key: $value");
             }
         }
     }
 
-    public function handle(ResponseInterface $response)
+    public function handle(ResponseInterface $response): void
     {
         CHTTP::SetStatus($response->getStatusCode() . ' ' . $response->getReasonPhrase());
 

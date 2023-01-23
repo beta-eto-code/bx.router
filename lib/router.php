@@ -14,24 +14,17 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Router implements RouterInterface
 {
+    public Application $app;
     /**
-     * @var Application
-     */
-    private $app;
-    /**
-     * @var ExtendRouter
      * @psalm-suppress MissingDependency
      */
-    private $bitrixRouter;
+    private ExtendRouter $bitrixRouter;
     /**
-     * @var ExtendedRoutingConfigurator
      * @psalm-suppress MissingDependency
      */
-    private $configurator;
+    private ExtendedRoutingConfigurator $configurator;
 
     /**
-     * @param Application $app
-     * @param ExtendRouter $bitrixRouter
      * @psalm-suppress MissingDependency
      */
     public function __construct(Application $app, ExtendRouter $bitrixRouter)
@@ -45,11 +38,6 @@ class Router implements RouterInterface
         $this->configurator->setRouter($this->bitrixRouter);
     }
 
-    /**
-     * @param string $uri
-     * @param ControllerInterface $controller
-     * @return RouteContextInterface
-     */
     public function get(string $uri, ControllerInterface $controller): RouteContextInterface
     {
         $this->head($uri, $controller);
@@ -60,11 +48,6 @@ class Router implements RouterInterface
         return new RouteContext($this->bitrixRouter, $controller);
     }
 
-    /**
-     * @param string $uri
-     * @param ControllerInterface $controller
-     * @return RouteContextInterface
-     */
     private function head(string $uri, ControllerInterface $controller): RouteContextInterface
     {
         $proxyController = new ProxyController(
@@ -81,11 +64,6 @@ class Router implements RouterInterface
         return new RouteContext($this->bitrixRouter, $proxyController);
     }
 
-    /**
-     * @param string $uri
-     * @param ControllerInterface $controller
-     * @return RouteContextInterface
-     */
     public function post(string $uri, ControllerInterface $controller): RouteContextInterface
     {
         /**
@@ -95,11 +73,7 @@ class Router implements RouterInterface
         return new RouteContext($this->bitrixRouter, $controller);
     }
 
-    /**
-     * @param string $uri
-     * @param ControllerInterface $controller
-     * @return RouteContextInterface
-     */
+
     public function put(string $uri, ControllerInterface $controller): RouteContextInterface
     {
         /**
@@ -109,11 +83,6 @@ class Router implements RouterInterface
         return new RouteContext($this->bitrixRouter, $controller);
     }
 
-    /**
-     * @param string $uri
-     * @param ControllerInterface $controller
-     * @return RouteContextInterface
-     */
     public function delete(string $uri, ControllerInterface $controller): RouteContextInterface
     {
         /**
@@ -123,10 +92,6 @@ class Router implements RouterInterface
         return new RouteContext($this->bitrixRouter, $controller);
     }
 
-    /**
-     * @param ControllerInterface $controller
-     * @return RouteContextInterface
-     */
     public function default(ControllerInterface $controller): RouteContextInterface
     {
         /**

@@ -41,7 +41,7 @@ class ExtendedRoutingConfigurator extends RoutingConfigurator
     /**
      * @return ExtendedRoutingConfiguration
      */
-    public function createExtendConfiguration()
+    public function createExtendConfiguration(): ExtendedRoutingConfiguration
     {
         $configuration = new ExtendedRoutingConfiguration();
 

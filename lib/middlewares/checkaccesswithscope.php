@@ -15,8 +15,8 @@ class CheckAccessWithScope implements MiddlewareChainInterface
 {
     use ChainHelper;
 
-    private string $scope = '';
-    private array $roleList = [];
+    private string $scope;
+    private array $roleList;
 
     public function __construct(string $scope, int ...$roleList)
     {
@@ -25,9 +25,6 @@ class CheckAccessWithScope implements MiddlewareChainInterface
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
      * @throws ForbiddenException
      * @throws UnauthorizedException
      */

@@ -15,19 +15,9 @@ class AuthBasic implements MiddlewareChainInterface
 {
     use ChainHelper;
 
-    /**
-     * @var UserServiceInterface
-     */
-    private $userService;
-    /**
-     * @var AccessStrategyInterface|null
-     */
-    private $accessStrategy;
+    private UserServiceInterface $userService;
+    private ?AccessStrategyInterface $accessStrategy;
 
-    /**
-     * @param UserServiceInterface $userService
-     * @param AccessStrategyInterface|null $accessStrategy
-     */
     public function __construct(UserServiceInterface $userService, ?AccessStrategyInterface $accessStrategy = null)
     {
         $this->userService = $userService;

@@ -9,26 +9,19 @@ use CUser;
 
 interface BitrixServiceInterface
 {
-    /**
-     * @return Application
-     */
-    public function getBxApplication();
+    public function getBxApplication(): Application;
 
     /**
-     * @return CUser
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function getCUser();
+    public function getCUser(): CUser;
 
-    /**
-     * @return void
-     */
-    public function includeModule(string $moduleName);
+    public function includeModule(string $moduleName): void;
 
     /**
      * @return UserTable
      */
-    public function getUserTable();
+    public function getUserTable(): UserTable;
 
     /**
      * @param string $tableName
