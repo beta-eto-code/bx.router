@@ -27,10 +27,7 @@ abstract class BaseController implements ControllerInterface
      */
     protected $container;
 
-    /**
-     * @var SplObjectStorage
-     */
-    private $postData;
+    private ?SplObjectStorage $postData = null;
 
     public function setBitrixService(BitrixServiceInterface $bitrixService)
     {

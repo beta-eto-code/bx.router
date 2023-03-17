@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface ValidatorDataInterface
 {
-    public function __construct(DataSelectorInterface ...$selectorList);
+    //public function __construct(DataSelectorInterface ...$selectorList);
 
     /**
      * @throws FormException
