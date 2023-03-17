@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use SplObjectStorage;
+use Throwable;
 
 trait ChainHelper
 {
@@ -33,7 +34,13 @@ trait ChainHelper
         }
 
         $this->store->rewind();
-        $internal = $this->store->current();
+
+        try {
+            $internal = $this->store->current();
+        } catch (Throwable $e) {
+            $internal = false;
+        }
+
         if ($internal instanceof MiddlewareChainInterface) {
             return $internal->addMiddleware($middleware);
         }
