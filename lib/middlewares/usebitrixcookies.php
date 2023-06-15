@@ -17,6 +17,9 @@ class UseBitrixCookies implements MiddlewareChainInterface
     {
         $response = $this->runChain($request, $handler);
 
+        /**
+         * @psalm-suppress UndefinedMethod
+         */
         $bxCookies = Context::getCurrent()->getResponse()->getCookies();
         foreach ($bxCookies as $cookie) {
             setcookie(

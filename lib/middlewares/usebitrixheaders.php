@@ -17,6 +17,9 @@ class UseBitrixHeaders implements MiddlewareChainInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $this->runChain($request, $handler);
+        /**
+         * @psalm-suppress UndefinedMethod
+         */
         $bxResponse = Context::getCurrent()->getResponse();
         $bxResponse->writeHeaders();
 

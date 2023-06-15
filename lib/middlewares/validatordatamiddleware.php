@@ -5,6 +5,7 @@ namespace BX\Router\Middlewares;
 use BX\Router\Exceptions\FormException;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Middlewares\Traits\ChainHelper;
+use BX\Router\Middlewares\Validator\ValidatorDataInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

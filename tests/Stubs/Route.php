@@ -6,18 +6,22 @@ class Route
 {
     private string $uri;
     /**
-     * @var callable
+     * @var mixed
      */
     private $controller;
 
-    public function __construct(string $uri, callable $controller)
+    /**
+     * @param string $uri
+     * @param mixed $controller
+     */
+    public function __construct(string $uri, $controller)
     {
         $this->uri = $uri;
         $this->controller = $controller;
     }
 
     /**
-     * @return callable
+     * @return mixed
      */
     public function getController()
     {

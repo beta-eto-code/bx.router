@@ -2,9 +2,12 @@
 
 namespace BX\Router\Tests;
 
+use Bitrix\Main\Engine\CurrentUser;
+use Bx\Model\AbsOptimizedModel;
 use Bx\Model\Interfaces\UserContextInterface;
 use Bx\Model\Interfaces\UserServiceInterface;
-use BX\Router\Middlewares\AuthBasic;
+use Bx\Model\Models\User;
+use BX\Router\Middlewares\AuthByBxCookie;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
@@ -12,29 +15,17 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class AuthBasicTest extends TestCase
+class AuthByBxCookieTest extends TestCase
 {
     public function testProcess()
     {
-        $login = 'testLogin';
-        $password = 'testPassword';
-
-        $mockedUserContext = $this->createMock(UserContextInterface::class);
         $mockedUserService = $this->createMock(UserServiceInterface::class);
         $mockedUserService
-            ->method('login')
-            ->willReturnCallback(function (
-                string $currentLogin,
-                string $currentPassword
-            ) use (
-                $login,
-                $password,
-                $mockedUserContext
-            ): ?UserContextInterface {
-                if ($login === $currentLogin && $password === $currentPassword) {
-                    return $mockedUserContext;
+            ->method('getById')
+            ->willReturnCallback(function (int $id, UserContextInterface $userContext = null): ?AbsOptimizedModel {
+                if ($id > 0) {
+                    return new User(['ID' => $id]);
                 }
-
                 return null;
             });
 
@@ -49,20 +40,15 @@ class AuthBasicTest extends TestCase
                 return $response;
             });
 
-        $authBasic = new AuthBasic($mockedUserService);
+        $authBasic = new AuthByBxCookie($mockedUserService);
 
-        $request = new ServerRequest('GET', '/test', [], null, '1.1', [
-            'PHP_AUTH_USER' => $login,
-            'PHP_AUTH_PW' => $password,
-        ]);
+        CurrentUser::initInstanceWithData(['id' => 1]);
+        $request = new ServerRequest('GET', '/test', [], null, '1.1');
         $resultResponse = $authBasic->process($request, $mockedHandler);
         $bodyData = $this->getDataFromResponse($resultResponse);
         $this->assertTrue($bodyData['hasUserContext'] ?? false);
 
-        $request = new ServerRequest('GET', '/test', [], null, '1.1', [
-            'PHP_AUTH_USER' => $login,
-            'PHP_AUTH_PW' => "invalid password",
-        ]);
+        CurrentUser::initInstanceWithData([]);
         $resultResponse = $authBasic->process($request, $mockedHandler);
         $bodyData = $this->getDataFromResponse($resultResponse);
         $this->assertFalse($bodyData['hasUserContext'] ?? false);

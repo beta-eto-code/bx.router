@@ -26,7 +26,7 @@
         "vimeo/psalm": "^5.4"
     },
     "autoload-dev": {
-        "classmap": ["lib/"],
+        "classmap": ["lib/", "tests/Stubs", "vendor"],
         "psr-4": {
             "Bx\\Router\\Tests\\": "tests/"
         }

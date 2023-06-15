@@ -28,6 +28,9 @@ class AuthByBxCookie implements MiddlewareChainInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        /**
+         * @psalm-suppress RedundantCast
+         */
         $userId = (int) CurrentUser::get()->getId();
         if ($userId === 0) {
             return $this->runChain($request, $handler);

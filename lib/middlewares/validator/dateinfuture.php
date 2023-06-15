@@ -1,30 +1,37 @@
 <?php
 
-namespace BX\Router\Middlewares;
+namespace BX\Router\Middlewares\Validator;
 
-use Psr\Http\Message\ServerRequestInterface;
+use DateTimeImmutable;
+use Exception;
 
-class DateInFuture implements ValidatorDataInterface
+class DateInFuture extends BaseValidator
 {
     private string $dateFormat;
-    /**
-     * @var DataSelectorInterface[]
-     */
-    private array $selectorList;
 
     public static function fromBody(string $dateFormat, string ...$fieldNames): DateInFuture
     {
-        return new DateInFuture($dateFormat, new BodyDataSelector(...$fieldNames));
+        return new DateInFuture($dateFormat, new BodyDataSelector($fieldNames, Factory::getOrCreateRequestReader()));
     }
 
     public function __construct(string $dateFormat, DataSelectorInterface ...$selectorList)
     {
+        parent::__construct(...$selectorList);
         $this->dateFormat = $dateFormat;
-        $this->selectorList = $selectorList;
     }
 
-    public function validate(ServerRequestInterface $request): void
+    /**
+     * @throws Exception
+     */
+    protected function validateItem(SelectorItem $item): void
     {
-        // TODO: Implement validate() method.
+        $date = DateTimeImmutable::createFromFormat($this->dateFormat, $item->value);
+        if (empty($date)) {
+            throw new Exception($item->getSubjectItemName() . ' ' . $item->key . ': не верный формат даты');
+        }
+
+        if ($date->getTimestamp() <= time()) {
+            throw new Exception($item->getSubjectItemName() . ' ' . $item->key . ': не верная дата');
+        }
     }
 }

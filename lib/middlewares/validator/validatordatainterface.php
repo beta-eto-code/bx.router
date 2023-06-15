@@ -1,6 +1,6 @@
 <?php
 
-namespace BX\Router\Middlewares;
+namespace BX\Router\Middlewares\Validator;
 
 use BX\Router\Exceptions\FormException;
 use Psr\Http\Message\ServerRequestInterface;

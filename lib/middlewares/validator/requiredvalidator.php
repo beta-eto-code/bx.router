@@ -1,35 +1,35 @@
 <?php
 
-namespace BX\Router\Middlewares;
+namespace BX\Router\Middlewares\Validator;
 
 use BX\Router\Exceptions\FormException;
+use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 
-class RequiredValidator implements ValidatorDataInterface
+class RequiredValidator extends BaseValidator
 {
-    /**
-     * @var DataSelectorInterface[]
-     */
-    private array $selectorList;
-
-    public function __construct(DataSelectorInterface ...$selectorList)
+    public static function fromBody(string ...$fieldNames): RequiredValidator
     {
-        $this->selectorList = $selectorList;
+        return new RequiredValidator(new BodyDataSelector($fieldNames, Factory::getOrCreateRequestReader()));
     }
 
-    public function validate(ServerRequestInterface $request): void
+    public static function fromHeaders(string ...$headerNames): RequiredValidator
     {
-        $formException = new FormException();
-        foreach ($this->selectorList as $selector) {
-            foreach ($selector->getDataIterable($request) as $key => $value) {
-                if (empty($value)) {
-                    $formException->addErrorField($key, 'не может пустым');
-                }
-            }
-        }
+        return new RequiredValidator(new HeaderSelector(...$headerNames));
+    }
 
-        if ($formException->hasErrors()) {
-            throw $formException;
+    public static function fromAttribute(string ...$attributeNames): RequiredValidator
+    {
+        return new RequiredValidator(new AttributeSelector(...$attributeNames));
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function validateItem(SelectorItem $item): void
+    {
+        if (empty($item->value)) {
+            throw new Exception($item->getSubjectItemName() . " $item->key не может пустым");
         }
     }
 }

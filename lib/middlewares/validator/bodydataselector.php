@@ -1,21 +1,22 @@
 <?php
 
-namespace BX\Router\Middlewares;
+namespace BX\Router\Middlewares\Validator;
 
 use Psr\Http\Message\ServerRequestInterface;
 use SplObjectStorage;
 
 class BodyDataSelector implements DataSelectorInterface
 {
-    private static ?SplObjectStorage $postData = null;
     /**
      * @var string[]
      */
     private array $fieldNames;
+    private RequestReader $requestReader;
 
-    public function __construct(string ...$fieldNames)
+    public function __construct(array $fieldNames, ?RequestReader $requestReader = null)
     {
         $this->fieldNames = $fieldNames;
+        $this->requestReader = $requestReader ?? new RequestReader();
     }
 
     public function getDataIterable(ServerRequestInterface $request): iterable
@@ -25,37 +26,15 @@ class BodyDataSelector implements DataSelectorInterface
         }
 
         $result = [];
-        $data = $this->getParsedPostData($request);
+        $data = $this->requestReader->getParsedPostData($request);
         foreach ($this->fieldNames as $fieldName) {
             $result[$fieldName] = $data[$fieldName] ?? null;
         }
         return $result;
     }
 
-    protected function getParsedPostData(ServerRequestInterface $request): array
+    public static function getSubjectItemName(): string
     {
-        if (is_null(static::$postData)) {
-            static::$postData = new SplObjectStorage();
-        }
-
-        /**
-         * @psalm-suppress InvalidArgument
-         */
-        if (isset(static::$postData[$request])) {
-            return static::$postData[$request];
-        }
-
-        $data = json_decode($request->getBody()->getContents(), true);
-        if ($data !== null) {
-            /**
-             * @psalm-suppress InvalidArgument
-             */
-            return static::$postData[$request] = $data;
-        }
-
-        /**
-         * @psalm-suppress InvalidArgument,InvalidReturnStatement
-         */
-        return static::$postData[$request] = $request->getParsedBody() ?? [];
+        return 'поле';
     }
 }

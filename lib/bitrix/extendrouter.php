@@ -46,7 +46,7 @@ class ExtendRouter extends Router
     /**
      * @param ControllerInterface $controller
      */
-    public function setDefaultController(ControllerInterface $controller)
+    public function setDefaultController(ControllerInterface $controller): void
     {
         $this->defaultController = $controller;
     }
@@ -54,9 +54,13 @@ class ExtendRouter extends Router
     /**
      * @param HttpRequest $request
      * @return Route|void
+     * @psalm-suppress MoreSpecificImplementedParamType
      */
     public function match($request)
     {
+        /**
+         * @psalm-suppress UndefinedMethod
+         */
         return parent::match($request) ?? new Route($request->getRequestUri(), $this->defaultController);
     }
 }

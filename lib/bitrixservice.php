@@ -111,6 +111,7 @@ class BitrixService implements BitrixServiceInterface
      * @throws LoaderException
      * @throws ObjectPropertyException
      * @throws SystemException
+     * @psalm-suppress InvalidReturnStatement
      */
     public function getHlBlock(string $tableName)
     {
@@ -144,6 +145,9 @@ class BitrixService implements BitrixServiceInterface
      */
     public function saveFile(array $fileInfo, string $savePath): int
     {
+        /**
+         * @psalm-suppress RedundantCast
+         */
         return (int) CFile::SaveFile($fileInfo, $savePath);
     }
 }
