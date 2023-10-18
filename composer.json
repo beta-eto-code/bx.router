@@ -18,7 +18,7 @@
         "psr/http-server-middleware": "^1.0",
         "beta/bx.jwt": "^1.0",
         "beta/bitrix-psr7": "^1.0",
-        "beta/bitrix-psr17": "^1.0"
+        "beta/bitrix-psr17": "dev-master"
     },
 
     "repositories": [
