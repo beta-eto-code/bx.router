@@ -12,12 +12,12 @@
     "require": {
         "php": ">=7.2",
         "ext-json": "*",
-        "psr/http-message": "^1.0",
+        "psr/http-message": "^2.0",
         "psr/http-factory": "^1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "beta/bx.jwt": "^1.0",
-        "beta/bitrix-psr7": "^1.0",
-        "beta/bitrix-psr17": "^1.0"
+        "beta/bitrix-psr7": "*",
+        "beta/bitrix-psr17": "*"
     }
 }
