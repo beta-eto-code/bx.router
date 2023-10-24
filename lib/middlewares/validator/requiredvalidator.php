@@ -18,7 +18,7 @@ class RequiredValidator extends BaseValidator
         return new RequiredValidator(new HeaderSelector(...$headerNames));
     }
 
-    public static function fromAttribute(string ...$attributeNames): RequiredValidator
+    public static function fromAttributes(string ...$attributeNames): RequiredValidator
     {
         return new RequiredValidator(new AttributeSelector(...$attributeNames));
     }

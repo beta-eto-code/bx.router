@@ -7,17 +7,43 @@ use Exception;
 
 class DateInFutureValidator extends BaseValidator
 {
-    private string $dateFormat;
+    private DateValidator $dateValidator;
 
-    public static function fromBody(string $dateFormat, string ...$fieldNames): DateInFuture
+    public static function fromBody(string $dateFormat, string ...$fieldNames): DateInFutureValidator
     {
-        return new DateInFuture($dateFormat, new BodyDataSelector($fieldNames, Factory::getOrCreateRequestReader()));
+        return new DateInFutureValidator(
+            $dateFormat,
+            new BodyDataSelector($fieldNames, Factory::getOrCreateRequestReader())
+        );
+    }
+
+    public static function fromHeaders(string $dateFormat, string ...$headerNames): DateInFutureValidator
+    {
+        return new DateInFutureValidator(
+            $dateFormat,
+            new HeaderSelector(...$headerNames)
+        );
+    }
+
+    public static function fromAttributes(string $dateFormat, string ...$attributeNames): DateInFutureValidator
+    {
+        return new DateInFutureValidator(
+            $dateFormat,
+            new AttributeSelector(...$attributeNames)
+        );
     }
 
     public function __construct(string $dateFormat, DataSelectorInterface ...$selectorList)
     {
+        $this->dateValidator = (new DateValidator($dateFormat))->withLimitFromDate(new DateTimeImmutable());
         parent::__construct(...$selectorList);
-        $this->dateFormat = $dateFormat;
+    }
+
+    public function withEqual(): DateInFutureValidator
+    {
+        $newValidator = clone $this;
+        $newValidator->dateValidator = $newValidator->dateValidator->withEqual();
+        return $newValidator;
     }
 
     /**
@@ -25,13 +51,6 @@ class DateInFutureValidator extends BaseValidator
      */
     protected function validateItem(SelectorItem $item): void
     {
-        $date = DateTimeImmutable::createFromFormat($this->dateFormat, $item->value);
-        if (empty($date)) {
-            throw new Exception($item->getSubjectItemName() . ' ' . $item->key . ': не верный формат даты');
-        }
-
-        if ($date->getTimestamp() <= time()) {
-            throw new Exception($item->getSubjectItemName() . ' ' . $item->key . ': не верная дата');
-        }
+        $this->dateValidator->validateItem($item);
     }
 }

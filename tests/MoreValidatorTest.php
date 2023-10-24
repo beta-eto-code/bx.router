@@ -4,10 +4,10 @@ namespace BX\Router\Tests;
 
 use BX\Router\Exceptions\FormException;
 use BX\Router\Middlewares\Validator\MoreValidator;
+use BX\Router\Tests\Utils\ValidatorTestCase;
 use GuzzleHttp\Psr7\ServerRequest;
-use PHPUnit\Framework\TestCase;
 
-class MoreValidatorTest extends TestCase
+class MoreValidatorTest extends ValidatorTestCase
 {
     /**
      * @throws FormException
@@ -25,20 +25,21 @@ class MoreValidatorTest extends TestCase
 
         $bodyData =  json_encode(['number' => 4]);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $moreValidator->validate($request);
+        $this->testValidatorFailCase($moreValidator, $request, FormException::class);
 
         $moreValidator = MoreValidator::fromBody(5, 'number');
         $bodyData =  json_encode(['number' => 5]);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $moreValidator->validate($request);
+        $this->testValidatorFailCase($moreValidator, $request, FormException::class);
 
         $bodyData =  json_encode([]);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
         $moreValidator->validate($request);
     }
 
+    /**
+     * @throws FormException
+     */
     public function testFromHeaders(): void
     {
         $moreValidator = MoreValidator::fromHeaders(10, 'UserId')
@@ -53,8 +54,7 @@ class MoreValidatorTest extends TestCase
         $moreValidator->validate($request);
 
         $request = new ServerRequest('GET', '/test', ['UserId' => '1']);
-        $this->expectException(FormException::class);
-        $moreValidator->validate($request);
+        $this->testValidatorFailCase($moreValidator, $request, FormException::class);
 
         $moreValidator = MoreValidator::fromHeaders(10, 'UserId')
             ->withValueModifier(function ($value): int {
@@ -62,8 +62,7 @@ class MoreValidatorTest extends TestCase
             });
 
         $request = new ServerRequest('GET', '/test', ['UserId' => '10']);
-        $this->expectException(FormException::class);
-        $moreValidator->validate($request);
+        $this->testValidatorFailCase($moreValidator, $request, FormException::class);
 
         $request = new ServerRequest('GET', '/test', []);
         $moreValidator->validate($request);
@@ -83,13 +82,11 @@ class MoreValidatorTest extends TestCase
         $moreValidator->validate($request);
 
         $request = (new ServerRequest('POST', '/test'))->withAttribute('id', 400);
-        $this->expectException(FormException::class);
-        $moreValidator->validate($request);
+        $this->testValidatorFailCase($moreValidator, $request, FormException::class);
 
         $moreValidator = MoreValidator::fromAttributes(1000, 'id');
         $request = (new ServerRequest('POST', '/test'))->withAttribute('id', 1000);
-        $this->expectException(FormException::class);
-        $moreValidator->validate($request);
+        $this->testValidatorFailCase($moreValidator, $request, FormException::class);
 
         $request = (new ServerRequest('POST', '/test'));
         $moreValidator->validate($request);

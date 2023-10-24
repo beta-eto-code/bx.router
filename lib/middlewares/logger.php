@@ -10,10 +10,18 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Bitrix\Main\Entity\DataManager;
 
 class Logger implements MiddlewareChainInterface
 {
     use ChainHelper;
+
+    private ?DataManager $logTable;
+
+    public function __construct(?DataManager $logTable = null)
+    {
+        $this->logTable = $logTable ?? new RouterLogTable();
+    }
 
     /**
      * @param ServerRequestInterface $request
@@ -27,7 +35,7 @@ class Logger implements MiddlewareChainInterface
         /**
          * @psalm-suppress MissingDependency,UndefinedMethod,UndefinedInterfaceMethod
          */
-        RouterLogTable::add([
+        $this->logTable::add([
             'url' => $request->getRequestTarget(),
             'method' => $request->getMethod(),
             'controller' => get_class($handler),

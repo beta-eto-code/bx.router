@@ -3,14 +3,18 @@
 namespace BX\Router\Tests;
 
 use BX\Router\Exceptions\FormException;
+use BX\Router\Middlewares\Validator\NotEqualValidator;
 use BX\Router\Tests\Utils\ValidatorTestCase;
 use GuzzleHttp\Psr7\ServerRequest;
 
 class NotEqualValidatorTest extends ValidatorTestCase
 {
+    /**
+     * @throws FormException
+     */
     public function testFromBody(): void
     {
-        $notEqualValidator = NotEqualValidator::fromBody('name', ['one', 'two', 'tree']);
+        $notEqualValidator = NotEqualValidator::fromBody(['one', 'two', 'tree'], 'name');
         $bodyData =  json_encode(['name' => 'four']);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
         $notEqualValidator->validate($request);
@@ -32,14 +36,17 @@ class NotEqualValidatorTest extends ValidatorTestCase
         $notEqualValidator->validate($request);
     }
 
+    /**
+     * @throws FormException
+     */
     public function testFromHeaders(): void
     {
         $notEqualValidator = NotEqualValidator::fromHeaders(
-            'Content-Type',
             [
                 'multipart/form-data',
                 'application/json'
-            ]
+            ],
+            'Content-Type'
         );
         $request = new ServerRequest('GET', '/test', ['Content-Type' => 'application/xml']);
         $notEqualValidator->validate($request);
@@ -54,16 +61,19 @@ class NotEqualValidatorTest extends ValidatorTestCase
         $notEqualValidator->validate($request);
     }
 
+    /**
+     * @throws FormException
+     */
     public function testFromAttributes(): void
     {
-        $notEqualValidator = NotEqualValidator::fromAttributes('id', [10])->withStrictMode();
+        $notEqualValidator = NotEqualValidator::fromAttributes([10], 'id')->withStrictMode();
         $request = (new ServerRequest('POST', '/test'))->withAttribute('id', 20);
         $notEqualValidator->validate($request);
 
         $request = (new ServerRequest('POST', '/test'))->withAttribute('id', '10');
         $notEqualValidator->validate($request);
 
-        $notEqualValidator = NotEqualValidator::fromBody('id', [10]);
+        $notEqualValidator = NotEqualValidator::fromAttributes([10], 'id');
         $this->testValidatorFailCase($notEqualValidator, $request, FormException::class);
 
         $request = (new ServerRequest('POST', '/test'));

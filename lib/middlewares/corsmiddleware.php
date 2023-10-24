@@ -41,15 +41,8 @@ class CorsMiddleware implements MiddlewareChainInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        /**
-         * @psalm-suppress DocblockTypeContradiction,RedundantConditionGivenDocblockType
-         */
-        $origin = current($request->getHeader('Referer') ?? ($request->getHeader('Origin') ?? []));
-        if (!empty($origin)) {
-            $origin = trim($origin, '/');
-        }
-
-        if (empty($origin) || !in_array($origin, $this->allowOrigin)) {
+        $origin = $this->getOriginFromRequest($request);
+        if (!$this->originIsValid($origin) || !$this->methodIsValid($request)) {
             return $this->runChain($request, $handler);
         }
 
@@ -61,5 +54,32 @@ class CorsMiddleware implements MiddlewareChainInterface
             ->withHeader('Access-Control-Allow-Headers', $this->allowHeaders)
             ->withHeader('Access-Control-Allow-Methods', $this->allowMethods)
             ->withHeader('Access-Control-Allow-Credentials', 'true');
+    }
+
+    private function methodIsValid(ServerRequestInterface $request): bool
+    {
+        $currentMethod = strtoupper($request->getMethod());
+        return $currentMethod === 'OPTIONS' || in_array($currentMethod, $this->getAllowedMethodWithUpperCase());
+    }
+
+    private function getAllowedMethodWithUpperCase(): array
+    {
+        return array_map(function ($method): string {
+            return strtoupper((string) $method);
+        }, $this->allowMethods);
+    }
+
+    private function originIsValid(string $origin): bool
+    {
+        return !empty($origin) && in_array($origin, $this->allowOrigin);
+    }
+
+    private function getOriginFromRequest(ServerRequestInterface $request): string
+    {
+        $origin = current($request->getHeader('Origin') ?: ($request->getHeader('Referer') ?? []));
+        if (!empty($origin)) {
+            $origin = trim($origin, '/');
+        }
+        return $origin ?: '';
     }
 }

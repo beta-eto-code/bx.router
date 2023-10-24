@@ -3,7 +3,6 @@
 namespace BX\Router\Middlewares\Validator;
 
 use BX\Router\Exceptions\FormException;
-use Closure;
 use EmptyIterator;
 use Psr\Http\Message\ServerRequestInterface;
 use Iterator;
@@ -51,7 +50,7 @@ abstract class BaseValidator implements ValidatorDataInterface
     {
         foreach ($this->selectorList as $selector) {
             foreach ($selector->getDataIterable($request) as $key => $value) {
-                if (is_callable($this->valueModifier)) {
+                if (!is_null($value) && is_callable($this->valueModifier)) {
                     $value = ($this->valueModifier)($value);
                 }
                 yield new SelectorItem((string)$key, $value, $selector);

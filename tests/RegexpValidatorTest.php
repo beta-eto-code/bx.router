@@ -4,10 +4,10 @@ namespace BX\Router\Tests;
 
 use BX\Router\Exceptions\FormException;
 use BX\Router\Middlewares\Validator\RegexpValidator;
+use BX\Router\Tests\Utils\ValidatorTestCase;
 use GuzzleHttp\Psr7\ServerRequest;
-use PHPUnit\Framework\TestCase;
 
-class RegexpValidatorTest extends TestCase
+class RegexpValidatorTest extends ValidatorTestCase
 {
     /**
      * @throws FormException
@@ -21,13 +21,11 @@ class RegexpValidatorTest extends TestCase
 
         $bodyData = json_encode(['field_one' => 'test_qweqwe']);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $regexpValidator->validate($request);
+         $this->testValidatorFailCase($regexpValidator, $request, FormException::class);
 
         $bodyData = json_encode(['field_two' => 'test_sdfsdf']);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $regexpValidator->validate($request);
+         $this->testValidatorFailCase($regexpValidator, $request, FormException::class);
 
         $bodyData = json_encode([]);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
@@ -44,16 +42,13 @@ class RegexpValidatorTest extends TestCase
         $regexpValidator->validate($request);
 
         $request = new ServerRequest('GET', '/test', ['Authorization' => 'Bearer_test1234']);
-        $this->expectException(FormException::class);
-        $regexpValidator->validate($request);
+         $this->testValidatorFailCase($regexpValidator, $request, FormException::class);
 
         $request = new ServerRequest('GET', '/test', ['Authorization' => '144']);
-        $this->expectException(FormException::class);
-        $regexpValidator->validate($request);
+         $this->testValidatorFailCase($regexpValidator, $request, FormException::class);
 
         $request = new ServerRequest('GET', '/test', ['Authorization' => 144]);
-        $this->expectException(FormException::class);
-        $regexpValidator->validate($request);
+         $this->testValidatorFailCase($regexpValidator, $request, FormException::class);
 
         $request = new ServerRequest('GET', '/test', []);
         $regexpValidator->validate($request);
@@ -69,12 +64,10 @@ class RegexpValidatorTest extends TestCase
         $regexpValidator->validate($request);
 
         $request = (new ServerRequest('POST', '/test'))->withAttribute('internalId', 400);
-        $this->expectException(FormException::class);
-        $regexpValidator->validate($request);
+         $this->testValidatorFailCase($regexpValidator, $request, FormException::class);
 
         $request = (new ServerRequest('POST', '/test'))->withAttribute('internalId', 'id');
-        $this->expectException(FormException::class);
-        $regexpValidator->validate($request);
+         $this->testValidatorFailCase($regexpValidator, $request, FormException::class);
 
         $request = (new ServerRequest('POST', '/test'));
         $regexpValidator->validate($request);

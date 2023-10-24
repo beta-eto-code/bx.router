@@ -6,10 +6,10 @@ use BX\Router\Exceptions\FormException;
 use BX\Router\Middlewares\Validator\BodyDataSelector;
 use BX\Router\Middlewares\Validator\RequestReader;
 use BX\Router\Middlewares\Validator\RequiredValidator;
+use BX\Router\Tests\Utils\ValidatorTestCase;
 use GuzzleHttp\Psr7\ServerRequest;
-use PHPUnit\Framework\TestCase;
 
-class RequiredValidatorTest extends TestCase
+class RequiredValidatorTest extends ValidatorTestCase
 {
     /**
      * @throws FormException
@@ -25,14 +25,12 @@ class RequiredValidatorTest extends TestCase
         $requiredValidator->validate($request);
 
         $dataRequest = ['email' => 'test@mail.ru'];
-        $this->expectException(FormException::class);
         $request = new ServerRequest('GET', '/test', [], json_encode($dataRequest), '1.1');
-        $requiredValidator->validate($request);
+        $this->testValidatorFailCase($requiredValidator, $request, FormException::class);
 
         $dataRequest = ['name' => 'alex'];
-        $this->expectException(FormException::class);
         $request = new ServerRequest('GET', '/test', [], json_encode($dataRequest), '1.1');
-        $requiredValidator->validate($request);
+        $this->testValidatorFailCase($requiredValidator, $request, FormException::class);
     }
 
     /**
@@ -46,14 +44,12 @@ class RequiredValidatorTest extends TestCase
         $requiredValidator->validate($request);
 
         $dataRequest = ['email' => 'test@mail.ru'];
-        $this->expectException(FormException::class);
         $request = new ServerRequest('GET', '/test', [], json_encode($dataRequest), '1.1');
-        $requiredValidator->validate($request);
+        $this->testValidatorFailCase($requiredValidator, $request, FormException::class);
 
         $dataRequest = ['name' => 'alex'];
-        $this->expectException(FormException::class);
         $request = new ServerRequest('GET', '/test', [], json_encode($dataRequest), '1.1');
-        $requiredValidator->validate($request);
+        $this->testValidatorFailCase($requiredValidator, $request, FormException::class);
     }
 
     /**
@@ -79,8 +75,7 @@ class RequiredValidatorTest extends TestCase
                 'Authorization' => 'Bearer some_token',
             ]
         );
-        $this->expectException(FormException::class);
-        $requiredValidator->validate($request);
+        $this->testValidatorFailCase($requiredValidator, $request, FormException::class);
 
         $request = new ServerRequest(
             'GET',
@@ -89,8 +84,7 @@ class RequiredValidatorTest extends TestCase
                 'Content-Type' => 'application/json'
             ]
         );
-        $this->expectException(FormException::class);
-        $requiredValidator->validate($request);
+        $this->testValidatorFailCase($requiredValidator, $request, FormException::class);
     }
 
     /**
@@ -98,7 +92,7 @@ class RequiredValidatorTest extends TestCase
      */
     public function testFromAttributes(): void
     {
-        $requiredValidator = RequiredValidator::fromAttribute('id', 'sectionId');
+        $requiredValidator = RequiredValidator::fromAttributes('id', 'sectionId');
         $request = (new ServerRequest('GET', '/test'))
             ->withAttribute('id', 1234)
             ->withAttribute('sectionId', 1);
@@ -106,12 +100,10 @@ class RequiredValidatorTest extends TestCase
 
         $request = (new ServerRequest('GET', '/test'))
             ->withAttribute('id', 1234);
-        $this->expectException(FormException::class);
-        $requiredValidator->validate($request);
+        $this->testValidatorFailCase($requiredValidator, $request, FormException::class);
 
         $request = (new ServerRequest('GET', '/test'))
             ->withAttribute('sectionId', 1);
-        $this->expectException(FormException::class);
-        $requiredValidator->validate($request);
+        $this->testValidatorFailCase($requiredValidator, $request, FormException::class);
     }
 }

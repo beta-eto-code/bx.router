@@ -4,10 +4,10 @@ namespace BX\Router\Tests;
 
 use BX\Router\Exceptions\FormException;
 use BX\Router\Middlewares\Validator\EqualValidator;
+use BX\Router\Tests\Utils\ValidatorTestCase;
 use GuzzleHttp\Psr7\ServerRequest;
-use PHPUnit\Framework\TestCase;
 
-class EqualValidatorTest extends TestCase
+class EqualValidatorTest extends ValidatorTestCase
 {
     /**
      * @throws FormException
@@ -29,8 +29,7 @@ class EqualValidatorTest extends TestCase
 
         $bodyData =  json_encode(['name' => 'other']);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $equalValidator->validate($request);
+        $this->testValidatorFailCase($equalValidator, $request, FormException::class);
 
         $bodyData =  json_encode([]);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
@@ -56,8 +55,7 @@ class EqualValidatorTest extends TestCase
         $equalValidator->validate($request);
 
         $request = new ServerRequest('GET', '/test', ['Content-Type' => 'application/xml']);
-        $this->expectException(FormException::class);
-        $equalValidator->validate($request);
+        $this->testValidatorFailCase($equalValidator, $request, FormException::class);
 
         $request = new ServerRequest('GET', '/test', []);
         $equalValidator->validate($request);
@@ -73,15 +71,13 @@ class EqualValidatorTest extends TestCase
         $equalValidator->validate($request);
 
         $request = (new ServerRequest('POST', '/test'))->withAttribute('id', '10');
-        $this->expectException(FormException::class);
-        $equalValidator->validate($request);
+        $this->testValidatorFailCase($equalValidator, $request, FormException::class);
 
-        $equalValidator = EqualValidator::fromBody([10], 'id');
+        $equalValidator = EqualValidator::fromAttributes([10], 'id');
         $equalValidator->validate($request);
 
         $request = (new ServerRequest('POST', '/test'))->withAttribute('id', 20);
-        $this->expectException(FormException::class);
-        $equalValidator->validate($request);
+        $this->testValidatorFailCase($equalValidator, $request, FormException::class);
 
         $request = (new ServerRequest('POST', '/test'));
         $equalValidator->validate($request);

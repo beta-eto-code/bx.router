@@ -4,10 +4,10 @@ namespace BX\Router\Tests;
 
 use BX\Router\Exceptions\FormException;
 use BX\Router\Middlewares\Validator\BetweenValidator;
+use BX\Router\Tests\Utils\ValidatorTestCase;
 use GuzzleHttp\Psr7\ServerRequest;
-use PHPUnit\Framework\TestCase;
 
-class BetweenValidatorTest extends TestCase
+class BetweenValidatorTest extends ValidatorTestCase
 {
     /**
      * @throws FormException
@@ -21,8 +21,7 @@ class BetweenValidatorTest extends TestCase
 
         $bodyData =  json_encode(['number' => 1]);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $compareValidator->validate($request);
+         $this->testValidatorFailCase($compareValidator, $request, FormException::class);
 
         $bodyData =  json_encode([]);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
@@ -42,8 +41,7 @@ class BetweenValidatorTest extends TestCase
         $compareValidator->validate($request);
 
         $request = new ServerRequest('GET', '/test', ['UserId' => '144']);
-        $this->expectException(FormException::class);
-        $compareValidator->validate($request);
+         $this->testValidatorFailCase($compareValidator, $request, FormException::class);
 
         $request = new ServerRequest('GET', '/test', []);
         $compareValidator->validate($request);
@@ -61,12 +59,10 @@ class BetweenValidatorTest extends TestCase
 
         $compareValidator = BetweenValidator::fromAttributes(1000, 1455, 'id');
         $request = (new ServerRequest('POST', '/test'))->withAttribute('id', 1455);
-        $this->expectException(FormException::class);
-        $compareValidator->validate($request);
+         $this->testValidatorFailCase($compareValidator, $request, FormException::class);
 
         $request = (new ServerRequest('POST', '/test'))->withAttribute('id', 1456);
-        $this->expectException(FormException::class);
-        $compareValidator->validate($request);
+         $this->testValidatorFailCase($compareValidator, $request, FormException::class);
 
         $request = (new ServerRequest('POST', '/test'));
         $compareValidator->validate($request);
