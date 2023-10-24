@@ -2,10 +2,11 @@
 
 namespace BX\Router\Tests;
 
+use BX\Router\Exceptions\FormException;
+use BX\Router\Tests\Utils\ValidatorTestCase;
 use GuzzleHttp\Psr7\ServerRequest;
-use PHPUnit\Framework\TestCase;
 
-class NotEqualValidator extends TestCase
+class NotEqualValidatorTest extends ValidatorTestCase
 {
     public function testFromBody(): void
     {
@@ -16,18 +17,15 @@ class NotEqualValidator extends TestCase
 
         $bodyData =  json_encode(['name' => 'tree']);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $notEqualValidator->validate($request);
+        $this->testValidatorFailCase($notEqualValidator, $request, FormException::class);
 
         $bodyData =  json_encode(['name' => 'one']);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $notEqualValidator->validate($request);
+        $this->testValidatorFailCase($notEqualValidator, $request, FormException::class);
 
         $bodyData =  json_encode(['name' => 'one']);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
-        $this->expectException(FormException::class);
-        $notEqualValidator->validate($request);
+        $this->testValidatorFailCase($notEqualValidator, $request, FormException::class);
 
         $bodyData =  json_encode([]);
         $request = new ServerRequest('POST', '/test', [], $bodyData);
@@ -47,12 +45,10 @@ class NotEqualValidator extends TestCase
         $notEqualValidator->validate($request);
 
         $request = new ServerRequest('GET', '/test', ['Content-Type' => 'multipart/form-data']);
-        $this->expectException(FormException::class);
-        $notEqualValidator->validate($request);
+        $this->testValidatorFailCase($notEqualValidator, $request, FormException::class);
 
         $request = new ServerRequest('GET', '/test', ['Content-Type' => 'application/json']);
-        $this->expectException(FormException::class);
-        $notEqualValidator->validate($request);
+        $this->testValidatorFailCase($notEqualValidator, $request, FormException::class);
 
         $request = new ServerRequest('GET', '/test', []);
         $notEqualValidator->validate($request);
@@ -68,8 +64,7 @@ class NotEqualValidator extends TestCase
         $notEqualValidator->validate($request);
 
         $notEqualValidator = NotEqualValidator::fromBody('id', [10]);
-        $this->expectException(FormException::class);
-        $notEqualValidator->validate($request);
+        $this->testValidatorFailCase($notEqualValidator, $request, FormException::class);
 
         $request = (new ServerRequest('POST', '/test'));
         $notEqualValidator->validate($request);

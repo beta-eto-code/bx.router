@@ -5,7 +5,7 @@ namespace BX\Router\Middlewares\Validator;
 use DateTimeImmutable;
 use Exception;
 
-class DateInFuture extends BaseValidator
+class DateInFutureValidator extends BaseValidator
 {
     private string $dateFormat;
 
