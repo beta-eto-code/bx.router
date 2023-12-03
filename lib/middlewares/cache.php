@@ -5,6 +5,7 @@ namespace BX\Router\Middlewares;
 use BX\Router\Interfaces\MiddlewareChainInterface;
 use BX\Router\Middlewares\Traits\ChainHelper;
 use Exception;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -81,12 +82,18 @@ class Cache implements MiddlewareChainInterface
         $cache = BitrixCache::createInstance();
         if ($cache->initCache($this->ttl, $key, static::CACHE_DIR)) {
             $responseData = $cache->getVars();
-            $response = unserialize($responseData);
+            $response = unserialize($responseData['response'] ?: '');
+            $body = $responseData['body'] ?: '';
+            if ($response instanceof ResponseInterface) {
+                $response = $response->withBody(Utils::streamFor($body));
+            }
         } elseif ($cache->startDataCache()) {
             try {
                 $response = $this->runChain($request, $handler);
                 $responseData = serialize($response);
-                $cache->endDataCache($responseData);
+                $bodyString = (string) $response->getBody();
+                $cache->endDataCache(['response' => $responseData, 'body' => $bodyString]);
+                $response->withBody(Utils::streamFor($bodyString));
             } catch (Throwable $e) {
                 $cache->abortDataCache();
                 throw $e;
