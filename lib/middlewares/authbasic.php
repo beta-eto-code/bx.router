@@ -38,6 +38,7 @@ class AuthBasic implements MiddlewareChainInterface
      * @var string|null
      */
     private $notificationMessage = null;
+    private string $attributeKey;
 
     /**
      * AuthBasic constructor.
@@ -51,15 +52,25 @@ class AuthBasic implements MiddlewareChainInterface
         $this->accessStrategy = $accessStrategy;
     }
 
-    public function setRequiredAuthMode(AppFactoryInterface $appFactory, ?string $notificationMessage = null): void
+    public function setRequiredAuthMode(
+        AppFactoryInterface $appFactory,
+        ?string $notificationMessage = null,
+        string $attributeKey = 'user'
+    ): void
     {
         $this->authIsRequired = true;
         $this->appFactory = $appFactory;
         $this->notificationMessage = $notificationMessage;
+        $this->attributeKey = $attributeKey;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $userContext = $request->getAttribute($this->attributeKey);
+        if ($userContext instanceof UserContextInterface) {
+            return $this->runChain($request, $handler);
+        }
+
         $params = $request->getServerParams();
         $user = (string)$params['PHP_AUTH_USER'];
         $password = (string)$params['PHP_AUTH_PW'];
@@ -77,7 +88,7 @@ class AuthBasic implements MiddlewareChainInterface
         }
 
         if ($userContext instanceof UserContextInterface) {
-            return $this->runChain($request->withAttribute('user', $userContext), $handler);
+            return $this->runChain($request->withAttribute($this->attributeKey, $userContext), $handler);
         }
 
         return $this->runChain($request, $handler);
