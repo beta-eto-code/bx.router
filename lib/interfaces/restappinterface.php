@@ -21,6 +21,12 @@ interface RestAppInterface
     public function setService(string $name, $serviceInstance);
 
     /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getService(string $name);
+
+    /**
      * @param ResponseHandler $responseHandler
      * @return void
      */
