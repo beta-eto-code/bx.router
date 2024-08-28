@@ -46,10 +46,15 @@ class AuthBasic implements MiddlewareChainInterface
      * @param AccessStrategyInterface|null $accessStrategy
      * @param bool $authIsRequired
      */
-    public function __construct(UserServiceInterface $userService, ?AccessStrategyInterface $accessStrategy = null) {
+    public function __construct(
+        UserServiceInterface $userService,
+        ?AccessStrategyInterface $accessStrategy = null,
+        string $attributeKey = 'user'
+    ) {
         $this->authIsRequired = false;
         $this->userService = $userService;
         $this->accessStrategy = $accessStrategy;
+        $this->attributeKey = $attributeKey;
     }
 
     public function setRequiredAuthMode(
