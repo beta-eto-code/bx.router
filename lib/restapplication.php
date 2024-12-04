@@ -106,7 +106,7 @@ class RestApplication implements RestAppInterface
 
         $response = $this->executeController($request, $controller);
         $this->responseHandler->handle($response);
-        $this->bitrixService->getBxApplication()->terminate();
+        $this->bitrixService->getBxApplication()->end();
     }
 
     /**
